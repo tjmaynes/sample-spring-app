@@ -1,8 +1,6 @@
 package com.tjmaynes.recipebook.core.domain
 
 import arrow.core.Either
-import arrow.core.NonEmptyList
-import com.tjmaynes.recipebook.core.common.ValidationError
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Instant

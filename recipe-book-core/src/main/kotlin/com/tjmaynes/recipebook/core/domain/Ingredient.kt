@@ -1,12 +1,10 @@
 package com.tjmaynes.recipebook.core.domain
 
 import arrow.core.Either
-import arrow.core.extensions.validated.applicativeError.handleError
 import arrow.core.fix
-import com.tjmaynes.recipebook.core.common.ValidationCheck
-import com.tjmaynes.recipebook.core.common.ValidationError
-import com.tjmaynes.recipebook.core.common.ValidationErrors
-import com.tjmaynes.recipebook.core.common.getValidationErrors
+import com.tjmaynes.recipebook.core.validation.ValidationCheck
+import com.tjmaynes.recipebook.core.validation.ValidationErrors
+import com.tjmaynes.recipebook.core.validation.getErrors
 import java.time.Instant
 import java.util.*
 
@@ -50,5 +48,5 @@ fun Ingredient.validate(): Either<ValidationErrors, Ingredient> =
                     fieldIsGreaterThanZero("servingSize", servingSize.toDouble()),
                     fieldIsGreaterThanZero("price", price)
             ) { this@validate }.handleErrorWith { raiseError(it) }.fix().toEither()
-                    .mapLeft { getValidationErrors(it).toList() }
+                    .mapLeft { getErrors(it) }
         }

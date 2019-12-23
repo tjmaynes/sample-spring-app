@@ -1,4 +1,4 @@
-package com.tjmaynes.recipebook.core.common
+package com.tjmaynes.recipebook.core.validation
 
 import arrow.Kind
 import arrow.core.*
@@ -40,11 +40,13 @@ class ValidationCheck<T>(
             else just(item)
 }
 
-fun getValidationErrors(validationError: ValidationError): Nel<String> = when (validationError) {
+private fun getValidationErrors(validationError: ValidationError): Nel<String> = when (validationError) {
     is ValidationError.PropertyInvalid -> Nel(validationError.reason)
     is ValidationError.Multiple -> validationError.errors
             .map { getValidationErrors(it) }
             .flatten()
 }
+
+fun getErrors(validationError: ValidationError): List<String> = getValidationErrors(validationError).toList()
 
 typealias ValidationErrors = List<String>
