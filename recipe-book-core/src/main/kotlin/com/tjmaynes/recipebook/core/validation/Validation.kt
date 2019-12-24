@@ -17,7 +17,7 @@ object ValidationErrorSemigroup : Semigroup<ValidationError> {
         this is ValidationError.Multiple && b is ValidationError.Multiple -> ValidationError.Multiple(errors + b.errors)
         this is ValidationError.Multiple && b !is ValidationError.Multiple -> ValidationError.Multiple(errors + b)
         this !is ValidationError.Multiple && b is ValidationError.Multiple -> ValidationError.Multiple(this.nel() + b.errors)
-        else -> ValidationError.Multiple(NonEmptyList(this, b))
+        else -> ValidationError.Multiple(Nel(this, b))
     }
 }
 

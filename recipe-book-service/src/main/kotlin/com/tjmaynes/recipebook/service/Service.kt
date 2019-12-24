@@ -9,7 +9,7 @@ import reactor.netty.http.server.HttpServer
 import java.time.Duration
 import java.util.concurrent.atomic.AtomicReference
 
-class Application {
+class Service {
     private val httpHandler: HttpHandler
     private val server: HttpServer
     private val disposableRef = AtomicReference<DisposableServer>()
@@ -21,6 +21,7 @@ class Application {
         }
 
         server = HttpServer.create().host("127.0.0.1").port(port)
+
         httpHandler = WebHttpHandlerBuilder
                 .applicationContext(context)
                 .build()
@@ -41,4 +42,4 @@ class Application {
     }
 }
 
-fun main(args: Array<String>) = Application().startAndAwait()
+fun main(args: Array<String>) = Service().startAndAwait()
