@@ -1,13 +1,10 @@
 package com.tjmaynes.recipebook.service
 
-import com.tjmaynes.recipebook.core.domain.Ingredient
-import com.tjmaynes.recipebook.core.types.IService
-import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class RoutesTest {
-    private val ingredientService = mockk<IService<Ingredient>>()
+//    private val ingredientService = mockk<IService<Ingredient>>()
 
     @BeforeEach
     fun setup() {

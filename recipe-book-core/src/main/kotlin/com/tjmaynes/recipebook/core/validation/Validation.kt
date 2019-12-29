@@ -50,3 +50,4 @@ private fun getValidationErrors(validationError: ValidationError): Nel<String> =
 fun getErrors(validationError: ValidationError): List<String> = getValidationErrors(validationError).toList()
 
 typealias ValidationErrors = List<String>
+typealias Validatable<T> = Either<ValidationErrors, T>

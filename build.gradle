@@ -26,11 +26,12 @@ allprojects {
 
         implementation "io.arrow-kt:arrow-core:0.10.4"
         implementation "io.arrow-kt:arrow-syntax:0.10.4"
+        implementation "io.arrow-kt:arrow-fx:0.10.4"
         kapt "io.arrow-kt:arrow-meta:0.10.4"
 
         testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"
         testImplementation "org.junit.jupiter:junit-jupiter-api:5.5.2"
-        testImplementation "io.mockk:mockk:1.9.3.kotlin12"
+        testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     }
 
     compileKotlin {
