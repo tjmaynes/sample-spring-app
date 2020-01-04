@@ -10,6 +10,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.tjmaynes.recipebook.core.domain.Ingredient
 import com.tjmaynes.recipebook.core.types.IRepository
 import com.tjmaynes.recipebook.core.types.PaginatedRequest
+import com.tjmaynes.recipebook.core.types.PaginatedResponse
 import com.tjmaynes.recipebook.core.types.ServiceException
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -26,12 +27,13 @@ class IngredientServiceTest {
     @Test
     fun `should be able to get all ingredients from a repository`() {
         runBlocking {
-            val expected = Right(listOf(Ingredient.identity()))
-
             val pagedRequest = PaginatedRequest(
                     pageNumber = 0,
                     pageSize = 10
             )
+            val expected = Right(PaginatedResponse(
+                    listOf(Ingredient.identity()), pagedRequest.pageNumber, pagedRequest.pageSize
+            ))
 
             whenever(repository.getAll(pagedRequest)).thenReturn(expected)
 

@@ -12,11 +12,8 @@ import com.tjmaynes.recipebook.core.types.*
 import com.tjmaynes.recipebook.core.validation.ValidationErrors
 
 class IngredientService(private val repository: IRepository<Ingredient>) : IService<Ingredient> {
-    override suspend fun getAll(request: PaginatedRequest): ServiceResult<List<Ingredient>> =
-            repository.getAll(request).fold(
-                    { Left(handleRepositoryException(it)) },
-                    { Right(it) }
-            )
+    override suspend fun getAll(request: PaginatedRequest): ServiceResult<PaginatedResponse<Ingredient>> =
+            repository.getAll(request).mapLeft { handleRepositoryException(it) }
 
     override suspend fun getById(id: String): ServiceResult<Ingredient> =
             repository.getById(id).fold(
@@ -51,15 +48,13 @@ class IngredientService(private val repository: IRepository<Ingredient>) : IServ
     override suspend fun removeItem(id: String): ServiceResult<String> =
             repository.removeItem(id).mapLeft { handleRepositoryException(it) }
 
-    private fun handleNotFoundException(errors: ValidationErrors): ServiceException =
-            ServiceException(
-                    status = ServiceException.StatusCode.BadRequest,
-                    messages = errors
-            )
+    private fun handleNotFoundException(errors: ValidationErrors) = ServiceException(
+            status = ServiceException.StatusCode.BadRequest,
+            messages = errors
+    )
 
-    private fun handleRepositoryException(exception: Exception): ServiceException =
-            ServiceException(
-                    status = ServiceException.StatusCode.Unknown,
-                    messages = listOf(exception.localizedMessage)
-            )
+    private fun handleRepositoryException(exception: Exception) = ServiceException(
+            status = ServiceException.StatusCode.Unknown,
+            messages = listOf(exception.localizedMessage)
+    )
 }

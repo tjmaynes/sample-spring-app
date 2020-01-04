@@ -1,14 +1,12 @@
 package com.tjmaynes.recipebook.service
 
-import org.junit.jupiter.api.BeforeEach
+import com.nhaarman.mockitokotlin2.mock
+import com.tjmaynes.recipebook.core.domain.Ingredient
+import com.tjmaynes.recipebook.core.types.IService
 import org.junit.jupiter.api.Test
 
 class RoutesTest {
-//    private val ingredientService = mockk<IService<Ingredient>>()
-
-    @BeforeEach
-    fun setup() {
-    }
+    private val ingredientService = mock<IService<Ingredient>>()
 
     @Test
     fun `should be able to return all ingredients when ingredients exist`() {
