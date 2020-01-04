@@ -1,18 +1,13 @@
 plugins {
-    id 'org.springframework.boot' version '2.2.3.BUILD-SNAPSHOT'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'org.springframework.boot' version '2.2.0.RELEASE'
 }
 
-group = 'com.tjmaynes.recipebook.service'
-version = '0.0.1-SNAPSHOT'
-
 dependencies {
-    compile project(":recipe-book-core")
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation project(":recipe-book-core")
+    implementation project(":recipe-book-persistence")
 
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.2.2.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.2.2.RELEASE'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
