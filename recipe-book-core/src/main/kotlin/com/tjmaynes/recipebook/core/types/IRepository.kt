@@ -3,10 +3,22 @@ package com.tjmaynes.recipebook.core.types
 import arrow.core.Either
 import arrow.core.Option
 
+data class RepositoryException(
+        val status: StatusCode,
+        val messages: List<String>
+) {
+    enum class StatusCode {
+        NotFound,
+        Unknown
+    }
+}
+
+typealias RepositoryResult<T> = Either<RepositoryException, T>
+
 interface IRepository<T> {
-    suspend fun getAll(request: PaginatedRequest): Either<Exception, PaginatedResponse<T>>
-    suspend fun getById(id: String): Either<Exception, Option<T>>
-    suspend fun addItem(item: T): Either<Exception, T>
-    suspend fun updateItem(item: T): Either<Exception, T>
-    suspend fun removeItem(id: String): Either<Exception, String>
+    suspend fun getAll(request: PaginatedRequest): RepositoryResult<PaginatedResponse<T>>
+    suspend fun getById(id: String): RepositoryResult<T>
+    suspend fun addItem(item: T): RepositoryResult<T>
+    suspend fun updateItem(item: T): RepositoryResult<T>
+    suspend fun removeItem(id: String): RepositoryResult<String>
 }

@@ -15,7 +15,7 @@ jobs:
 
       - run:
           name: Run Test Suite
-          command: ./gradlew clean test
+          command: make test
 
       - run:
           name: Save Test Results

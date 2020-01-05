@@ -81,7 +81,5 @@ subprojects {
         testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"
         testImplementation "org.junit.jupiter:junit-jupiter-api:5.5.2"
         testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-
-        compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb-reactive', version: '2.2.2.RELEASE'
     }
 }

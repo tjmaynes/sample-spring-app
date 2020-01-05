@@ -1,45 +1,32 @@
 package com.tjmaynes.recipebook.persistence
 
-import arrow.core.Either
-import arrow.core.Option
-import arrow.core.Right
-import arrow.fx.IO
-import arrow.fx.extensions.fx
-import com.tjmaynes.recipebook.core.types.IRepository
-import com.tjmaynes.recipebook.core.types.PaginatedRequest
-import com.tjmaynes.recipebook.core.types.PaginatedResponse
-import kotlinx.coroutines.reactive.awaitLast
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate
-import org.springframework.data.mongodb.core.query.Query
+import arrow.core.*
+import com.tjmaynes.recipebook.core.types.*
 
-class DocumentRepository<T>(
-        private val template: ReactiveMongoTemplate,
-        private val classType: Class<T>
-): IRepository<T> {
-    override suspend fun getAll(request: PaginatedRequest): Either<Exception, PaginatedResponse<T>> =
-            IO.fx {
-                !effect {
-                    val query = Query().with(PageRequest.of(request.pageNumber, request.pageSize))
-                    val r = template.find(query, classType).awaitLast()
-                    Right(PaginatedResponse(listOf(r), request.pageNumber, request.pageSize))
-                }
-            }.suspended()
+class DocumentRepository<T>(private val database: IDatabase<T>): IRepository<T> {
+    override suspend fun getAll(request: PaginatedRequest): RepositoryResult<PaginatedResponse<T>> =
+            database.find(request).toEither { RepositoryException(
+                    status = RepositoryException.StatusCode.NotFound,
+                    messages = listOf("No items were found!")
+            ) }.flatMap { Right(PaginatedResponse(it, request.pageNumber, request.pageSize)) }
 
-    override suspend fun getById(id: String): Either<Exception, Option<T>> {
+    override suspend fun getById(id: String): RepositoryResult<T> =
+            database.findById(id).toEither { RepositoryException(
+                    status = RepositoryException.StatusCode.NotFound,
+                    messages = listOf("Item not found!")
+            ) }.flatMap { Right(it) }
+
+    override suspend fun addItem(item: T): RepositoryResult<T> =
+            database.insert(item).toEither { RepositoryException(
+                    status = RepositoryException.StatusCode.Unknown,
+                    messages = listOf("Something went wrong when inserting item - $item")
+            ) }.flatMap { Right(it) }
+
+    override suspend fun updateItem(item: T): RepositoryResult<T> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun addItem(item: T): Either<Exception, T> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override suspend fun updateItem(item: T): Either<Exception, T> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override suspend fun removeItem(id: String): Either<Exception, String> {
+    override suspend fun removeItem(id: String): RepositoryResult<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

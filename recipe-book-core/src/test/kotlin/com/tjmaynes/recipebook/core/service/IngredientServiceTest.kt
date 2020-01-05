@@ -1,28 +1,34 @@
 package com.tjmaynes.recipebook.core.service
 
 import arrow.core.Left
-import arrow.core.None
 import arrow.core.Right
-import arrow.core.Some
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.tjmaynes.recipebook.core.domain.Ingredient
-import com.tjmaynes.recipebook.core.types.IRepository
-import com.tjmaynes.recipebook.core.types.PaginatedRequest
-import com.tjmaynes.recipebook.core.types.PaginatedResponse
-import com.tjmaynes.recipebook.core.types.ServiceException
+import com.tjmaynes.recipebook.core.types.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class IngredientServiceTest {
     private val repository = mock<IRepository<Ingredient>>()
-    private val UnknownException = Left(ServiceException(
+    private val unknowException = Left(ServiceException(
             status = ServiceException.StatusCode.Unknown,
             messages = listOf("Something went wrong")
     ))
-    private val UnknownRuntimeException = Left(RuntimeException("Something went wrong"))
+    private val unknownRepositoryException = Left(RepositoryException(
+            status = RepositoryException.StatusCode.Unknown,
+            messages = listOf("Something went wrong")
+    ))
+    private val notFoundException = Left(ServiceException(
+            status = ServiceException.StatusCode.NotFound,
+            messages = listOf("Item not found!")
+    ))
+    private val notFoundRepositoryException = Left(RepositoryException(
+            status = RepositoryException.StatusCode.NotFound,
+            messages = listOf("Item not found!")
+    ))
 
     @Test
     fun `should be able to get all ingredients from a repository`() {
@@ -52,11 +58,11 @@ class IngredientServiceTest {
                     pageSize = 10
             )
 
-            whenever(repository.getAll(pagedRequest)).thenReturn(UnknownRuntimeException)
+            whenever(repository.getAll(pagedRequest)).thenReturn(unknownRepositoryException)
 
             val sut = IngredientService(repository)
 
-            assertEquals(UnknownException, sut.getAll(pagedRequest))
+            assertEquals(unknowException, sut.getAll(pagedRequest))
             verify(repository).getAll(pagedRequest)
         }
     }
@@ -65,7 +71,7 @@ class IngredientServiceTest {
     fun `should be able to get ingredient by id from a repository`() {
         runBlocking {
             val ingredient = Ingredient.identity()
-            val expected = Right(Some(ingredient))
+            val expected = Right(ingredient)
 
             whenever(repository.getById(ingredient.id.toString())).thenReturn(expected)
 
@@ -77,33 +83,29 @@ class IngredientServiceTest {
     }
 
     @Test
-    fun `should return a ServiceException when something went wrong fetching an ingredient by id`() {
+    fun `should return a ServiceException when unable to find an ingredient by id`() {
         runBlocking {
             val ingredient = Ingredient.identity()
 
-            whenever(repository.getById(ingredient.id.toString())).thenReturn(UnknownRuntimeException)
+            whenever(repository.getById(ingredient.id.toString())).thenReturn(notFoundRepositoryException)
 
             val sut = IngredientService(repository)
 
-            assertEquals(UnknownException, sut.getById(ingredient.id.toString()))
+            assertEquals(notFoundException, sut.getById(ingredient.id.toString()))
             verify(repository).getById(ingredient.id.toString())
         }
     }
 
     @Test
-    fun `should return a ServiceException when unable to find a specific ingredient`() {
+    fun `should return a ServiceException when something went wrong fetching an ingredient by id`() {
         runBlocking {
             val ingredient = Ingredient.identity()
-            val none = Right(None)
 
-            whenever(repository.getById(ingredient.id.toString())).thenReturn(none)
+            whenever(repository.getById(ingredient.id.toString())).thenReturn(unknownRepositoryException)
 
             val sut = IngredientService(repository)
 
-            assertEquals(Left(ServiceException(
-                    status = ServiceException.StatusCode.NotFound,
-                    messages = emptyList()
-            )), sut.getById(ingredient.id.toString()))
+            assertEquals(unknowException, sut.getById(ingredient.id.toString()))
             verify(repository).getById(ingredient.id.toString())
         }
     }
@@ -128,11 +130,11 @@ class IngredientServiceTest {
         runBlocking {
             val ingredient = Ingredient.identity()
 
-            whenever(repository.addItem(ingredient)).thenReturn(UnknownRuntimeException)
+            whenever(repository.addItem(ingredient)).thenReturn(unknownRepositoryException)
 
             val sut = IngredientService(repository)
 
-            assertEquals(UnknownException, sut.addItem(ingredient))
+            assertEquals(unknowException, sut.addItem(ingredient))
             verify(repository).addItem(ingredient)
         }
     }
@@ -170,11 +172,11 @@ class IngredientServiceTest {
         runBlocking {
             val ingredient = Ingredient.identity()
 
-            whenever(repository.updateItem(ingredient)).thenReturn(UnknownRuntimeException)
+            whenever(repository.updateItem(ingredient)).thenReturn(unknownRepositoryException)
 
             val sut = IngredientService(repository)
 
-            assertEquals(UnknownException, sut.updateItem(ingredient))
+            assertEquals(unknowException, sut.updateItem(ingredient))
             verify(repository).updateItem(ingredient)
         }
     }
@@ -212,11 +214,11 @@ class IngredientServiceTest {
         runBlocking {
             val ingredient = Ingredient.identity()
 
-            whenever(repository.removeItem(ingredient.id.toString())).thenReturn(UnknownRuntimeException)
+            whenever(repository.removeItem(ingredient.id.toString())).thenReturn(unknownRepositoryException)
 
             val sut = IngredientService(repository)
 
-            assertEquals(UnknownException, sut.removeItem(ingredient.id.toString()))
+            assertEquals(unknowException, sut.removeItem(ingredient.id.toString()))
             verify(repository).removeItem(ingredient.id.toString())
         }
     }

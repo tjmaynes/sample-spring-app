@@ -2,6 +2,13 @@ plugins {
     id 'application'
 }
 
+dependencies {
+    implementation project(":recipe-book-core")
+    implementation project(":recipe-book-persistence")
+
+    implementation "com.google.code.gson:gson:2.8.6"
+}
+
 application {
     mainClassName = 'com.tjmaynes.recipebook.seeder.SeederKt'
 }
