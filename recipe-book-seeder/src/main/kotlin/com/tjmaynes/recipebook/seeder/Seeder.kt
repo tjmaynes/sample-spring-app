@@ -19,10 +19,10 @@ suspend fun seed(ingredientService: IService<Ingredient>): Either<ServiceExcepti
 }
 
 private fun <T> getJsonDataFromFile(fileLocation: String) =
-            Gson().fromJson<T>(
-                    FileReader(fileLocation),
-                    object : TypeToken<T>() {}.type
-            )
+        Gson().fromJson<T>(
+                FileReader(fileLocation),
+                object : TypeToken<T>() {}.type
+        )
 
 private fun createIngredientService(connectionString: String): IService<Ingredient> {
     val ingredientDatabase = DocumentDatabase.build(connectionString, Ingredient::class.java)
@@ -33,9 +33,11 @@ private fun createIngredientService(connectionString: String): IService<Ingredie
 fun main(args: Array<String>) {
     val connectionString = System.getenv("RECIPE_BOOK_DB_CONNECTION_STRING")
     val ingredientService = createIngredientService(connectionString)
-    
-    runBlocking { seed(ingredientService).fold(
-            {},
-            {}
-    ) }
+
+    runBlocking {
+        seed(ingredientService).fold(
+                {},
+                {}
+        )
+    }
 }

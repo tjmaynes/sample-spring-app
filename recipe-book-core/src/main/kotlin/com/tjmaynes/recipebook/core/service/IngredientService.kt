@@ -1,9 +1,6 @@
 package com.tjmaynes.recipebook.core.service
 
 import arrow.core.Left
-import arrow.core.None
-import arrow.core.Right
-import arrow.core.Some
 import arrow.fx.IO
 import arrow.fx.extensions.fx
 import com.tjmaynes.recipebook.core.domain.Ingredient

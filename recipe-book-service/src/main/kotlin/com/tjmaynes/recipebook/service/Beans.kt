@@ -6,8 +6,8 @@ import com.tjmaynes.recipebook.core.types.IRepository
 import com.tjmaynes.recipebook.core.types.IService
 import com.tjmaynes.recipebook.persistence.DocumentDatabase
 import com.tjmaynes.recipebook.persistence.DocumentRepository
-import com.tjmaynes.recipebook.service.types.IHandler
 import com.tjmaynes.recipebook.service.ingredient.IngredientHandler
+import com.tjmaynes.recipebook.service.types.IHandler
 import org.springframework.context.support.beans
 import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.server.WebHandler

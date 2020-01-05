@@ -19,7 +19,7 @@ class Service {
 
     companion object {
         fun build(beans: BeanDefinitionDsl, port: Int = 8080) = Service(
-            getHttpHandler(getApplicationContext(beans)), port
+                getHttpHandler(getApplicationContext(beans)), port
         )
     }
 

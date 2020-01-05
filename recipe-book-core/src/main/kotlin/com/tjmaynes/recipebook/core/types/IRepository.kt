@@ -1,7 +1,6 @@
 package com.tjmaynes.recipebook.core.types
 
 import arrow.core.Either
-import arrow.core.Option
 
 data class RepositoryException(
         val status: StatusCode,

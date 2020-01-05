@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.query.Query
 class DocumentDatabase<T>(
         private val template: ReactiveMongoTemplate,
         private val classType: Class<T>
-): IDatabase<T> {
+) : IDatabase<T> {
     override suspend fun find(request: PaginatedRequest): Option<List<T>> =
             IO.fx {
                 !effect {
@@ -42,11 +42,11 @@ class DocumentDatabase<T>(
 
     companion object {
         fun <T> build(connectionURL: String, classType: Class<T>): IDatabase<T> =
-            DocumentDatabase(
-                    ReactiveMongoTemplate(
-                            SimpleReactiveMongoDatabaseFactory(ConnectionString(connectionURL))
-                    ),
-                    classType
-            )
+                DocumentDatabase(
+                        ReactiveMongoTemplate(
+                                SimpleReactiveMongoDatabaseFactory(ConnectionString(connectionURL))
+                        ),
+                        classType
+                )
     }
 }

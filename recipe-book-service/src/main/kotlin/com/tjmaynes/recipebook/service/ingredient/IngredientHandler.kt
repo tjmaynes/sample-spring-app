@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.server.ServerResponse
 
 class IngredientHandler(
         private val ingredientService: IService<Ingredient>
-): IHandler<Ingredient> {
+) : IHandler<Ingredient> {
     override suspend fun all(serverRequest: ServerRequest): ServerResponse =
             ingredientService.getAll(createPaginatedRequest(serverRequest)).fold(
                     { createNon200Response(it).awaitFirst() },

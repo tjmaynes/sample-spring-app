@@ -31,6 +31,7 @@ class ValidationCheck<T>(
                     )
             )
             else just(item)
+
     fun fieldIsNotEmpty(valueName: String, actualValue: String): Kind<ValidatedPartialOf<ValidationError>, T> =
             if (actualValue.isEmpty()) raiseError(
                     ValidationError.PropertyInvalid(

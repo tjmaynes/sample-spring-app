@@ -15,7 +15,6 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.query.Query
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.lang.Exception
 
 class DocumentDatabaseTest {
     private val classType = Ingredient::class.java
