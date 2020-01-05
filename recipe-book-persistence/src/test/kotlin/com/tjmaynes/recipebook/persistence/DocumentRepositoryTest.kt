@@ -25,11 +25,11 @@ class DocumentRepositoryTest {
 
             val expected = listOf(Ingredient.identity())
 
-            whenever(database.find(request)).thenReturn(Some(expected))
+            whenever(database.find(request)).thenReturn(expected)
 
             val sut = DocumentRepository(database)
             assertEquals(sut.getAll(request), Right(PaginatedResponse(
-                    expected, request.pageNumber, request.pageSize
+                expected, request.pageNumber, request.pageSize
             )))
 
             verify(database).find(request)
@@ -42,12 +42,12 @@ class DocumentRepositoryTest {
             val database = mock<IDatabase<Ingredient>>()
             val request = PaginatedRequest(0, 10)
 
-            whenever(database.find(request)).thenReturn(None)
+            whenever(database.find(request)).thenReturn(emptyList())
 
             val sut = DocumentRepository(database)
             assertEquals(sut.getAll(request), Left(RepositoryException(
-                    status = RepositoryException.StatusCode.NotFound,
-                    messages = listOf("No items were found!")
+                status = RepositoryException.StatusCode.Unknown,
+                messages = listOf("Unexpected error has occurred.")
             )))
 
             verify(database).find(request)
@@ -80,8 +80,8 @@ class DocumentRepositoryTest {
 
             val sut = DocumentRepository(database)
             assertEquals(sut.getById(id), Left(RepositoryException(
-                    status = RepositoryException.StatusCode.NotFound,
-                    messages = listOf("Item not found!")
+                status = RepositoryException.StatusCode.NotFound,
+                messages = listOf("Item not found!")
             )))
 
             verify(database).findById(id)

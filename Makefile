@@ -13,11 +13,17 @@ test:
 	RECIPE_BOOK_DB_CONNECTION_STRING=$(RECIPE_BOOK_DB_CONNECTION_STRING) \
 	./gradlew test
 
-setup_docker_network:
-	(docker network rm $(IMAGE_NAME)-network || true) && docker network create $(IMAGE_NAME)-network
+remove_docker_network:
+	docker network rm $(IMAGE_NAME)-network || true
 
-start_local_db: setup_docker_network
-	(docker rm -f $(IMAGE_NAME)-db || true) && docker run -d \
+setup_docker_network: remove_docker_network
+	docker network create $(IMAGE_NAME)-network
+
+remove_local_db:
+	docker rm -f $(IMAGE_NAME)-db || true
+
+start_local_db: remove_local_db setup_docker_network
+	docker run -d \
 		--name $(IMAGE_NAME)-db \
 		--network $(IMAGE_NAME)-network \
 		-p 27017:27017 \

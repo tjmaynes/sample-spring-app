@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(":recipe-book-core")
+  implementation project(":recipe-book-core")
 
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb-reactive', version: '2.2.2.RELEASE'
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb-reactive', version: '2.2.2.RELEASE'
 }

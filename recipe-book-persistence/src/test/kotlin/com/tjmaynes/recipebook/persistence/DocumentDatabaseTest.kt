@@ -20,7 +20,7 @@ class DocumentDatabaseTest {
     private val classType = Ingredient::class.java
 
     @Test
-    fun `#find - should return an items when items exist`() {
+    fun `#find - should return items when items exist`() {
         runBlocking {
             val template = mock<ReactiveMongoTemplate>()
             val request = PaginatedRequest(0, 10)
@@ -31,7 +31,23 @@ class DocumentDatabaseTest {
             whenever(template.find(query, classType)).thenReturn(Flux.fromIterable(expected))
 
             val sut = DocumentDatabase(template, classType)
-            assertEquals(sut.find(request), Some(expected))
+            assertEquals(sut.find(request), expected)
+
+            verify(template).find(query, classType)
+        }
+    }
+
+    @Test
+    fun `#find - should return an empty when items do not exist`() {
+        runBlocking {
+            val template = mock<ReactiveMongoTemplate>()
+            val request = PaginatedRequest(0, 10)
+            val query = Query().with(PageRequest.of(request.pageNumber, request.pageSize))
+
+            whenever(template.find(query, classType)).thenReturn(Flux.empty())
+
+            val sut = DocumentDatabase(template, classType)
+            assertEquals(sut.find(request), emptyList<Ingredient>())
 
             verify(template).find(query, classType)
         }

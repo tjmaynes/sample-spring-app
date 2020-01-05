@@ -18,3 +18,8 @@ To run all tests, run the following command:
 ```bash
 make test
 ```
+
+To run the database locally, run the following command:
+```bash
+make start_local_db
+```
