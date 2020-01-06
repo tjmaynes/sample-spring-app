@@ -1,6 +1,6 @@
 IMAGE_NAME := recipe-book
 RECIPE_BOOK_ENVIRONMENT := development
-RECIPE_BOOK_DB_CONNECTION_STRING := mongodb://localhost:27017/recipe-book
+RECIPE_BOOK_DB_CONNECTION_STRING ?= mongodb://localhost:27017/recipe-book
 REGISTRY_USERNAME := tjmaynes
 REGISTRY_PASSWORD := ""
 TAG := 0.1.0

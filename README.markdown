@@ -11,11 +11,13 @@
 ## Usage
 To build the project, run the following command:
 ```bash
+RECIPE_BOOK_DB_CONNECTION_STRING=<some-connection-string> \
 make build
 ```
 
 To run all tests, run the following command:
 ```bash
+RECIPE_BOOK_DB_CONNECTION_STRING=<some-connection-string> \
 make test
 ```
 

@@ -15,7 +15,9 @@ jobs:
 
       - run:
           name: Run Test Suite
-          command: make test
+          command: |
+            RECIPE_BOOK_DB_CONNECTION_STRING=$RECIPE_BOOK_DB_CONNECTION_STRING \
+            make test
 
       - run:
           name: Save Test Results
