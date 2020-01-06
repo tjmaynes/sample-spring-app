@@ -7,11 +7,11 @@ TAG := 0.1.0
 
 build:
 	RECIPE_BOOK_DB_CONNECTION_STRING=$(RECIPE_BOOK_DB_CONNECTION_STRING) \
-	./gradlew build
+	./gradlew clean build
 
 test:
 	RECIPE_BOOK_DB_CONNECTION_STRING=$(RECIPE_BOOK_DB_CONNECTION_STRING) \
-	./gradlew test
+	./gradlew clean test
 
 remove_docker_network:
 	docker network rm $(IMAGE_NAME)-network || true

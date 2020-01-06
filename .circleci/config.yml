@@ -14,10 +14,10 @@ jobs:
       - checkout
 
       - run:
-          name: Run Test Suite
+          name: Build Artifact
           command: |
             RECIPE_BOOK_DB_CONNECTION_STRING=$RECIPE_BOOK_DB_CONNECTION_STRING \
-            make test
+            make build
 
       - run:
           name: Save Test Results
