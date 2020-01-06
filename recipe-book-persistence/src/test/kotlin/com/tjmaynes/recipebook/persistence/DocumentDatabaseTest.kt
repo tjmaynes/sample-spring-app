@@ -1,6 +1,7 @@
 package com.tjmaynes.recipebook.persistence
 
 import arrow.core.None
+import arrow.core.Right
 import arrow.core.Some
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -31,7 +32,7 @@ class DocumentDatabaseTest {
             whenever(template.find(query, classType)).thenReturn(Flux.fromIterable(expected))
 
             val sut = DocumentDatabase(template, classType)
-            assertEquals(sut.find(request), expected)
+            assertEquals(Right(expected), sut.find(request))
 
             verify(template).find(query, classType)
         }
@@ -47,7 +48,7 @@ class DocumentDatabaseTest {
             whenever(template.find(query, classType)).thenReturn(Flux.empty())
 
             val sut = DocumentDatabase(template, classType)
-            assertEquals(sut.find(request), emptyList<Ingredient>())
+            assertEquals(Right(emptyList<Ingredient>()), sut.find(request))
 
             verify(template).find(query, classType)
         }
@@ -63,7 +64,7 @@ class DocumentDatabaseTest {
             whenever(template.findById(expected.id.toString(), classType)).thenReturn(Mono.just(expected))
 
             val sut = DocumentDatabase(template, classType)
-            assertEquals(sut.findById(expected.id.toString()), Some(expected))
+            assertEquals(Right(Some(expected)), sut.findById(expected.id.toString()))
 
             verify(template).findById(expected.id.toString(), classType)
         }
@@ -77,7 +78,7 @@ class DocumentDatabaseTest {
             whenever(template.findById("some-id", classType)).thenReturn(Mono.empty())
 
             val sut = DocumentDatabase(template, classType)
-            assertEquals(sut.findById("some-id"), None)
+            assertEquals(Right(None), sut.findById("some-id"))
 
             verify(template).findById("some-id", classType)
         }
@@ -93,7 +94,7 @@ class DocumentDatabaseTest {
             whenever(template.insert(item)).thenReturn(Mono.just(item))
 
             val sut = DocumentDatabase(template, classType)
-            assertEquals(sut.insert(item), Some(item))
+            assertEquals(Right(item), sut.insert(item))
 
             verify(template).insert(item)
         }
@@ -106,10 +107,10 @@ class DocumentDatabaseTest {
 
             val item = Ingredient.identity()
 
-            whenever(template.insert(item)).thenReturn(Mono.empty())
+            whenever(template.insert(item)).thenReturn(Mono.empty<Ingredient>())
 
             val sut = DocumentDatabase(template, classType)
-            assertEquals(sut.insert(item), None)
+            assertEquals(Right(null), sut.insert(item))
 
             verify(template).insert(item)
         }

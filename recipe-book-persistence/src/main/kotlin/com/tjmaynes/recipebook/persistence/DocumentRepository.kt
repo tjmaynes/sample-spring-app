@@ -1,32 +1,38 @@
 package com.tjmaynes.recipebook.persistence
 
-import arrow.core.NonEmptyList
-import arrow.core.Right
-import arrow.core.flatMap
+import arrow.core.*
 import com.tjmaynes.recipebook.core.types.*
 
 class DocumentRepository<T>(private val database: IDatabase<T>) : IRepository<T> {
     override suspend fun getAll(request: PaginatedRequest): RepositoryResult<PaginatedResponse<T>> =
-        NonEmptyList.fromList(database.find(request)).toEither {
+        database.find(request).mapLeft {
             RepositoryException(
                 status = RepositoryException.StatusCode.Unknown,
                 messages = listOf("Unexpected error has occurred.")
             )
-        }.flatMap { Right(PaginatedResponse(it.all, request.pageNumber, request.pageSize)) }
+        }.flatMap { Right(PaginatedResponse(it, request.pageNumber, request.pageSize)) }
 
     override suspend fun getById(id: String): RepositoryResult<T> =
-        database.findById(id).toEither {
-            RepositoryException(
-                status = RepositoryException.StatusCode.NotFound,
-                messages = listOf("Item not found!")
-            )
-        }.flatMap { Right(it) }
-
-    override suspend fun addItem(item: T): RepositoryResult<T> =
-        database.insert(item).toEither {
+        database.findById(id).mapLeft {
             RepositoryException(
                 status = RepositoryException.StatusCode.Unknown,
-                messages = listOf("Something went wrong when inserting item - $item")
+                messages = listOf("Unexpected error has occurred.")
+            )
+        }.flatMap {
+            when (it) {
+                is Some -> Right(it.t)
+                is None -> Left(RepositoryException(
+                    status = RepositoryException.StatusCode.NotFound,
+                    messages = listOf("Item not found!")
+                ))
+            }
+        }
+
+    override suspend fun addItem(item: T): RepositoryResult<T> =
+        database.insert(item).mapLeft {
+            RepositoryException(
+                status = RepositoryException.StatusCode.Unknown,
+                messages = listOf("Unexpected error has occurred.")
             )
         }.flatMap { Right(it) }
 

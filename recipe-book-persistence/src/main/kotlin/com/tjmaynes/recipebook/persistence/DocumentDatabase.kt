@@ -1,7 +1,6 @@
 package com.tjmaynes.recipebook.persistence
 
-import arrow.core.Option
-import arrow.core.toOption
+import arrow.core.*
 import arrow.fx.IO
 import arrow.fx.extensions.fx
 import com.mongodb.ConnectionString
@@ -18,29 +17,44 @@ class DocumentDatabase<T>(
     private val template: ReactiveMongoTemplate,
     private val classType: Class<T>
 ) : IDatabase<T> {
-    override suspend fun find(request: PaginatedRequest): List<T> =
+    override suspend fun find(request: PaginatedRequest): Either<Exception, List<T>> =
         IO.fx {
             val query = Query().with(PageRequest.of(request.pageNumber, request.pageSize))
             !effect {
                 try {
-                    template
+                    val results = template
                         .find(query, classType)
                         .buffer(request.pageSize - 1)
                         .awaitLast()
+                    Right(results)
                 } catch (e: NoSuchElementException) {
-                    emptyList<T>()
+                    Right(emptyList<T>())
                 }
             }
         }.suspended()
 
-    override suspend fun findById(id: String): Option<T> =
+    override suspend fun findById(id: String): Either<Exception, Option<T>> =
         IO.fx {
-            !effect { template.findById(id, classType).block().toOption() }
+            !effect {
+                try {
+                    val results = template.findById(id, classType).block().toOption()
+                    Right(results)
+                } catch (e: Exception) {
+                    Left(e)
+                }
+            }
         }.suspended()
 
-    override suspend fun insert(item: T): Option<T> =
+    override suspend fun insert(item: T): Either<Exception, T> =
         IO.fx {
-            !effect { template.insert(item).block().toOption() }
+            !effect {
+                try {
+                    val results = template.insert(item).block()
+                    Right(results)
+                } catch (e: Exception) {
+                    Left(e)
+                }
+            }
         }.suspended()
 
     companion object {

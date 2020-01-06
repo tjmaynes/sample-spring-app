@@ -25,12 +25,12 @@ class DocumentRepositoryTest {
 
             val expected = listOf(Ingredient.identity())
 
-            whenever(database.find(request)).thenReturn(expected)
+            whenever(database.find(request)).thenReturn(Right(expected))
 
             val sut = DocumentRepository(database)
-            assertEquals(sut.getAll(request), Right(PaginatedResponse(
+            assertEquals(Right(PaginatedResponse(
                 expected, request.pageNumber, request.pageSize
-            )))
+            )), sut.getAll(request))
 
             verify(database).find(request)
         }
@@ -42,13 +42,12 @@ class DocumentRepositoryTest {
             val database = mock<IDatabase<Ingredient>>()
             val request = PaginatedRequest(0, 10)
 
-            whenever(database.find(request)).thenReturn(emptyList())
+            whenever(database.find(request)).thenReturn(Right(emptyList()))
 
             val sut = DocumentRepository(database)
-            assertEquals(sut.getAll(request), Left(RepositoryException(
-                status = RepositoryException.StatusCode.Unknown,
-                messages = listOf("Unexpected error has occurred.")
-            )))
+            assertEquals(Right(PaginatedResponse(
+                emptyList<Ingredient>(), 0, 10
+            )), sut.getAll(request))
 
             verify(database).find(request)
         }
@@ -61,10 +60,10 @@ class DocumentRepositoryTest {
             val id = "some-id"
             val ingredient = Ingredient.identity()
 
-            whenever(database.findById(id)).thenReturn(Some(ingredient))
+            whenever(database.findById(id)).thenReturn(Right(Some(ingredient)))
 
             val sut = DocumentRepository(database)
-            assertEquals(sut.getById(id), Right(ingredient))
+            assertEquals(Right(ingredient), sut.getById(id))
 
             verify(database).findById(id)
         }
@@ -76,13 +75,13 @@ class DocumentRepositoryTest {
             val database = mock<IDatabase<Ingredient>>()
             val id = "some-id"
 
-            whenever(database.findById(id)).thenReturn(None)
+            whenever(database.findById(id)).thenReturn(Right(None))
 
             val sut = DocumentRepository(database)
-            assertEquals(sut.getById(id), Left(RepositoryException(
+            assertEquals(Left(RepositoryException(
                 status = RepositoryException.StatusCode.NotFound,
                 messages = listOf("Item not found!")
-            )))
+            )), sut.getById(id))
 
             verify(database).findById(id)
         }
@@ -94,10 +93,10 @@ class DocumentRepositoryTest {
             val database = mock<IDatabase<Ingredient>>()
             val expected = Ingredient.identity()
 
-            whenever(database.insert(expected)).thenReturn(Some(expected))
+            whenever(database.insert(expected)).thenReturn(Right(expected))
 
             val sut = DocumentRepository(database)
-            assertEquals(sut.addItem(expected), Right(expected))
+            assertEquals(Right(expected), sut.addItem(expected))
 
             verify(database).insert(expected)
         }
@@ -111,7 +110,7 @@ class DocumentRepositoryTest {
 //            whenever(database.insert(expected)).thenReturn(Exception())
 
             val sut = DocumentRepository(database)
-            assertEquals(sut.addItem(expected), Right(expected))
+            assertEquals(Right(expected), sut.addItem(expected))
 
             verify(database).insert(expected)
         }
