@@ -3,6 +3,7 @@ package com.tjmaynes.recipebook.persistence
 import arrow.core.None
 import arrow.core.Right
 import arrow.core.Some
+import com.mongodb.client.result.DeleteResult
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -13,11 +14,12 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
+import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-class DocumentDatabaseTest {
+class MongoDbAdapterTest {
     private val classType = Ingredient::class.java
 
     @Test
@@ -31,7 +33,7 @@ class DocumentDatabaseTest {
 
             whenever(template.find(query, classType)).thenReturn(Flux.fromIterable(expected))
 
-            val sut = DocumentDatabase(template, classType)
+            val sut = MongoDbAdapter(template, classType)
             assertEquals(Right(expected), sut.find(request))
 
             verify(template).find(query, classType)
@@ -47,7 +49,7 @@ class DocumentDatabaseTest {
 
             whenever(template.find(query, classType)).thenReturn(Flux.empty())
 
-            val sut = DocumentDatabase(template, classType)
+            val sut = MongoDbAdapter(template, classType)
             assertEquals(Right(emptyList<Ingredient>()), sut.find(request))
 
             verify(template).find(query, classType)
@@ -63,7 +65,7 @@ class DocumentDatabaseTest {
 
             whenever(template.findById(expected.id.toString(), classType)).thenReturn(Mono.just(expected))
 
-            val sut = DocumentDatabase(template, classType)
+            val sut = MongoDbAdapter(template, classType)
             assertEquals(Right(Some(expected)), sut.findById(expected.id.toString()))
 
             verify(template).findById(expected.id.toString(), classType)
@@ -77,7 +79,7 @@ class DocumentDatabaseTest {
 
             whenever(template.findById("some-id", classType)).thenReturn(Mono.empty())
 
-            val sut = DocumentDatabase(template, classType)
+            val sut = MongoDbAdapter(template, classType)
             assertEquals(Right(None), sut.findById("some-id"))
 
             verify(template).findById("some-id", classType)
@@ -93,7 +95,7 @@ class DocumentDatabaseTest {
 
             whenever(template.insert(item)).thenReturn(Mono.just(item))
 
-            val sut = DocumentDatabase(template, classType)
+            val sut = MongoDbAdapter(template, classType)
             assertEquals(Right(item), sut.insert(item))
 
             verify(template).insert(item)
@@ -109,10 +111,57 @@ class DocumentDatabaseTest {
 
             whenever(template.insert(item)).thenReturn(Mono.empty<Ingredient>())
 
-            val sut = DocumentDatabase(template, classType)
+            val sut = MongoDbAdapter(template, classType)
             assertEquals(Right(null), sut.insert(item))
 
             verify(template).insert(item)
+        }
+    }
+
+    @Test
+    fun `#update - should return item when item has been updated`() {
+        runBlocking {
+            val template = mock<ReactiveMongoTemplate>()
+
+            val item = Ingredient.identity()
+            whenever(template.save(item)).thenReturn(Mono.just(item))
+
+            val sut = MongoDbAdapter(template, classType)
+            assertEquals(Right(item), sut.update(item))
+
+            verify(template).save(item)
+        }
+    }
+
+    @Test
+    fun `#remove - should return item id when item has been removed from database`() {
+        runBlocking {
+            val template = mock<ReactiveMongoTemplate>()
+            val itemId = "some-id"
+
+            val query = Query().addCriteria(Criteria(itemId))
+            whenever(template.remove(query, classType)).thenReturn(Mono.just(DeleteResult.acknowledged(1)))
+
+            val sut = MongoDbAdapter(template, classType)
+            assertEquals(Right(Some(itemId)), sut.remove(itemId))
+
+            verify(template).remove(query, classType)
+        }
+    }
+
+    @Test
+    fun `#remove - should return None when item was not removed from database`() {
+        runBlocking {
+            val template = mock<ReactiveMongoTemplate>()
+            val itemId = "some-id"
+
+            val query = Query().addCriteria(Criteria(itemId))
+            whenever(template.remove(query, classType)).thenReturn(Mono.just(DeleteResult.acknowledged(0)))
+
+            val sut = MongoDbAdapter(template, classType)
+            assertEquals(Right(None), sut.remove(itemId))
+
+            verify(template).remove(query, classType)
         }
     }
 }

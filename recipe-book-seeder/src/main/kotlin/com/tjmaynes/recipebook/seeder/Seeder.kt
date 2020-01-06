@@ -10,8 +10,8 @@ import com.tjmaynes.recipebook.core.types.IRepository
 import com.tjmaynes.recipebook.core.types.IService
 import com.tjmaynes.recipebook.core.types.ServiceException
 import com.tjmaynes.recipebook.core.types.ServiceResult
-import com.tjmaynes.recipebook.persistence.DocumentDatabase
-import com.tjmaynes.recipebook.persistence.DocumentRepository
+import com.tjmaynes.recipebook.persistence.MongoDbAdapter
+import com.tjmaynes.recipebook.persistence.Repository
 import java.io.FileReader
 
 suspend fun seedIngredients(ingredientService: IService<Ingredient>): List<ServiceResult<Ingredient>> =
@@ -27,8 +27,8 @@ private fun <T> getJsonDataFromFile(fileLocation: String) =
     )
 
 private fun <T> createRepository(connectionString: String, classType: Class<T>): IRepository<T> =
-    DocumentRepository(
-        DocumentDatabase.build(connectionString, classType)
+    Repository(
+        MongoDbAdapter.build(connectionString, classType)
     )
 
 fun main(args: Array<String>) {

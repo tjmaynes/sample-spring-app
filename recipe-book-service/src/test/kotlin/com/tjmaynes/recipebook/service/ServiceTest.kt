@@ -1,5 +1,6 @@
 package com.tjmaynes.recipebook.service
 
+import com.tjmaynes.recipebook.core.domain.Ingredient
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -13,9 +14,9 @@ class ServiceTest {
     private val port = 8181
     private val application = Service.build(beans, port)
     private val client = WebTestClient
-            .bindToServer()
-            .baseUrl("http://localhost:${port}")
-            .build()
+        .bindToServer()
+        .baseUrl("http://localhost:${port}")
+        .build()
 
     @BeforeAll
     internal fun beforeAll() {
@@ -25,15 +26,19 @@ class ServiceTest {
     @Test
     fun `should return a 200 status when calling GET healthcheck`() {
         readRequest("/healthcheck")
-                .expectStatus().isEqualTo(HttpStatus.OK)
+            .expectStatus().isEqualTo(HttpStatus.OK)
     }
 
     @Test
     fun `should be able to return all ingredients when ingredients exist`() {
-//        readRequest("/ingredient?pageNumber=0&pageSize=10")
-//                .expectStatus().isOk
-//                .expectBody()
-//                .jsonPath("$").isEqualTo("")
+        readRequest("/ingredient?pageNumber=0&pageSize=10")
+            .expectStatus().isOk
+            .expectBody()
+            .jsonPath("$").isEqualTo(mapOf(
+                "items" to emptyList<Ingredient>(),
+                "pageNumber" to 0,
+                "pageSize" to 10
+            ))
     }
 
     @Test
@@ -82,5 +87,5 @@ class ServiceTest {
     }
 
     private fun readRequest(endpoint: String) =
-            client.get().uri(endpoint).accept(MediaType.APPLICATION_JSON).exchange()
+        client.get().uri(endpoint).accept(MediaType.APPLICATION_JSON).exchange()
 }
