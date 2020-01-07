@@ -1,7 +1,6 @@
 package com.tjmaynes.recipebook.service
 
 import com.tjmaynes.recipebook.core.domain.Ingredient
-import com.tjmaynes.recipebook.service.types.IHandler
 import kotlinx.coroutines.reactive.awaitFirst
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.server.RouterFunction

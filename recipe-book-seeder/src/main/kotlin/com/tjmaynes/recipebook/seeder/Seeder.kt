@@ -1,6 +1,7 @@
 package com.tjmaynes.recipebook.seeder
 
 import arrow.core.Either
+import arrow.core.Option
 import arrow.core.extensions.either.applicative.applicative
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -15,7 +16,7 @@ import com.tjmaynes.recipebook.persistence.Repository
 import java.io.FileReader
 
 suspend fun seedIngredients(ingredientService: IService<Ingredient>): List<ServiceResult<Ingredient>> =
-    Either.applicative<Either<ServiceException, Ingredient>>().run {
+    Either.applicative<Either<ServiceException, Option<List<Ingredient>>>>().run {
         getJsonDataFromFile<List<Ingredient>>("./src/main/kotlin/")
             .map { ingredientService.addItem(it) }
     }
@@ -27,9 +28,7 @@ private fun <T> getJsonDataFromFile(fileLocation: String) =
     )
 
 private fun <T> createRepository(connectionString: String, classType: Class<T>): IRepository<T> =
-    Repository(
-        MongoDbAdapter.build(connectionString, classType)
-    )
+    Repository(MongoDbAdapter.build(connectionString, classType))
 
 fun main(args: Array<String>) {
     val connectionString = System.getenv("RECIPE_BOOK_DB_CONNECTION_STRING")

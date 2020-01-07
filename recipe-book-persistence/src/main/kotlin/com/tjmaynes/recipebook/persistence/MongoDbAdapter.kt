@@ -1,8 +1,6 @@
 package com.tjmaynes.recipebook.persistence
 
 import arrow.core.*
-import arrow.fx.IO
-import arrow.fx.extensions.fx
 import com.mongodb.ConnectionString
 import com.tjmaynes.recipebook.core.types.PaginatedRequest
 import kotlinx.coroutines.reactive.awaitLast
@@ -16,56 +14,46 @@ class MongoDbAdapter<T>(
     private val template: ReactiveMongoTemplate,
     private val classType: Class<T>
 ) : IDatabaseAdapter<T> {
-    override suspend fun find(request: PaginatedRequest): Either<Throwable, List<T>> =
-        IO.fx {
-            val query = Query().with(PageRequest.of(request.pageNumber, request.pageSize))
-            !effect {
-                Either.catch {
-                    template
-                        .find(query, classType)
-                        .buffer(request.pageSize - 1)
-                        .awaitLast()
-                }.fold(
-                    { when (it) {
-                        is NoSuchElementException -> Right(emptyList<T>())
-                        else -> Left(it)
-                    } },
-                    { Right(it) }
-                )
-            }
-        }.suspended()
+    override suspend fun find(request: PaginatedRequest): Either<Throwable, List<T>> {
+        val query = Query().with(PageRequest.of(request.pageNumber, request.pageSize))
+        return Either.catch {
+            template
+                .find(query, classType)
+                .buffer(request.pageSize - 1)
+                .awaitLast()
+        }.fold(
+            {
+                when (it) {
+                    is NoSuchElementException -> Right(emptyList<T>())
+                    else -> Left(it)
+                }
+            },
+            { Right(it) }
+        )
+    }
 
     override suspend fun findById(id: String): Either<Throwable, Option<T>> =
-        IO.fx {
-            !effect { Either.catch { template.findById(id, classType).block().toOption() } }
-        }.suspended()
+        Either.catch { template.findById(id, classType).block().toOption() }
 
     override suspend fun insert(item: T): Either<Throwable, T> =
-        IO.fx {
-            !effect { Either.catch { template.insert(item).block() } }
-        }.suspended()
+        Either.catch { template.insert(item).block() }
 
     override suspend fun update(item: T): Either<Throwable, T> =
-        IO.fx {
-            !effect { Either.catch { template.save(item).block() } }
-        }.suspended()
+        Either.catch { template.save(item).block() }
 
-    override suspend fun remove(id: String): Either<Throwable, Option<String>> =
-        IO.fx {
-            val query = Query().addCriteria(Criteria(id))
-            !effect {
-                Either.catch { template.remove(query, classType).block() }.flatMap { result ->
-                    when (val deleteResult = result.toOption()) {
-                        is Some -> if (deleteResult.t.wasAcknowledged() && deleteResult.t.deletedCount >= 1) {
-                            Right(Some(id))
-                        } else {
-                            Right(None)
-                        }
-                        is None -> Left(Exception("Unable to delete item $id at this time."))
-                    }
+    override suspend fun remove(id: String): Either<Throwable, Option<String>> {
+        val query = Query().addCriteria(Criteria(id))
+        return Either.catch { template.remove(query, classType).block() }.flatMap { result ->
+            when (val deleteResult = result.toOption()) {
+                is Some -> if (deleteResult.t.wasAcknowledged() && deleteResult.t.deletedCount >= 1) {
+                    Right(Some(id))
+                } else {
+                    Right(None)
                 }
+                is None -> Left(Exception("Unable to delete item $id at this time."))
             }
-        }.suspended()
+        }
+    }
 
     companion object {
         fun <T> build(connectionURL: String, classType: Class<T>): IDatabaseAdapter<T> =
