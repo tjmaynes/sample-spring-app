@@ -1,225 +1,225 @@
-package com.tjmaynes.recipebook.core.service
+package com.tjmaynes.recipebook.persistence
 
 import arrow.core.Left
+import arrow.core.None
 import arrow.core.Right
+import arrow.core.Some
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.tjmaynes.recipebook.core.domain.Ingredient
-import com.tjmaynes.recipebook.core.types.*
+import com.tjmaynes.recipebook.core.service.IngredientService
+import com.tjmaynes.recipebook.core.types.IRepository
+import com.tjmaynes.recipebook.core.types.PaginatedRequest
+import com.tjmaynes.recipebook.core.types.PaginatedResponse
+import com.tjmaynes.recipebook.core.types.ServiceException
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class IngredientServiceTest {
-    private val repository = mock<IRepository<Ingredient>>()
-    private val unknowException = Left(ServiceException(
-            status = ServiceException.StatusCode.Unknown,
-            messages = listOf("Something went wrong")
-    ))
-    private val unknownRepositoryException = Left(RepositoryException(
-            status = RepositoryException.StatusCode.Unknown,
-            messages = listOf("Something went wrong")
-    ))
-    private val notFoundException = Left(ServiceException(
-            status = ServiceException.StatusCode.NotFound,
-            messages = listOf("Item not found!")
-    ))
-    private val notFoundRepositoryException = Left(RepositoryException(
-            status = RepositoryException.StatusCode.NotFound,
-            messages = listOf("Item not found!")
-    ))
-
     @Test
-    fun `should be able to get all ingredients from a repository`() {
+    fun `#getAll - should return a PaginatedResponse when items exist`() {
         runBlocking {
-            val pagedRequest = PaginatedRequest(
-                    pageNumber = 0,
-                    pageSize = 10
-            )
-            val expected = Right(PaginatedResponse(
-                    listOf(Ingredient.identity()), pagedRequest.pageNumber, pagedRequest.pageSize
-            ))
+            val repository = mock<IRepository<Ingredient>>()
+            val request = PaginatedRequest(0, 10)
 
-            whenever(repository.getAll(pagedRequest)).thenReturn(expected)
+            val expected = listOf(Ingredient.identity())
+
+            whenever(repository.find(request)).thenReturn(Right(expected))
 
             val sut = IngredientService(repository)
+            assertEquals(Right(PaginatedResponse(
+                expected, request.pageNumber, request.pageSize
+            )), sut.getAll(request))
 
-            assertEquals(expected, sut.getAll(pagedRequest))
-            verify(repository).getAll(pagedRequest)
+            verify(repository).find(request)
         }
     }
 
     @Test
-    fun `should return a ServiceException when something went wrong fetching all ingredients`() {
+    fun `#getAll - should return an empty PaginatedResponse when no items exist`() {
         runBlocking {
-            val pagedRequest = PaginatedRequest(
-                    pageNumber = 0,
-                    pageSize = 10
-            )
+            val repository = mock<IRepository<Ingredient>>()
+            val request = PaginatedRequest(0, 10)
 
-            whenever(repository.getAll(pagedRequest)).thenReturn(unknownRepositoryException)
+            whenever(repository.find(request)).thenReturn(Right(emptyList()))
 
             val sut = IngredientService(repository)
+            assertEquals(Right(PaginatedResponse(
+                emptyList<Ingredient>(), 0, 10
+            )), sut.getAll(request))
 
-            assertEquals(unknowException, sut.getAll(pagedRequest))
-            verify(repository).getAll(pagedRequest)
+            verify(repository).find(request)
         }
     }
 
     @Test
-    fun `should be able to get ingredient by id from a repository`() {
+    fun `#getAll - should return a ServiceException if something goes wrong`() {
         runBlocking {
-            val ingredient = Ingredient.identity()
-            val expected = Right(ingredient)
+            val repository = mock<IRepository<Ingredient>>()
+            val request = PaginatedRequest(0, 10)
 
-            whenever(repository.getById(ingredient.id.toString())).thenReturn(expected)
-
-            val sut = IngredientService(repository)
-
-            assertEquals(Right(ingredient), sut.getById(ingredient.id.toString()))
-            verify(repository).getById(ingredient.id.toString())
-        }
-    }
-
-    @Test
-    fun `should return a ServiceException when unable to find an ingredient by id`() {
-        runBlocking {
-            val ingredient = Ingredient.identity()
-
-            whenever(repository.getById(ingredient.id.toString())).thenReturn(notFoundRepositoryException)
-
-            val sut = IngredientService(repository)
-
-            assertEquals(notFoundException, sut.getById(ingredient.id.toString()))
-            verify(repository).getById(ingredient.id.toString())
-        }
-    }
-
-    @Test
-    fun `should return a ServiceException when something went wrong fetching an ingredient by id`() {
-        runBlocking {
-            val ingredient = Ingredient.identity()
-
-            whenever(repository.getById(ingredient.id.toString())).thenReturn(unknownRepositoryException)
-
-            val sut = IngredientService(repository)
-
-            assertEquals(unknowException, sut.getById(ingredient.id.toString()))
-            verify(repository).getById(ingredient.id.toString())
-        }
-    }
-
-    @Test
-    fun `should be able to add an ingredient to a repository`() {
-        runBlocking {
-            val ingredient = Ingredient.identity()
-            val expected = Right(ingredient)
-
-            whenever(repository.addItem(ingredient)).thenReturn(expected)
-
-            val sut = IngredientService(repository)
-
-            assertEquals(expected, sut.addItem(ingredient))
-            verify(repository).addItem(ingredient)
-        }
-    }
-
-    @Test
-    fun `should return a ServiceException when something went wrong adding an ingredient`() {
-        runBlocking {
-            val ingredient = Ingredient.identity()
-
-            whenever(repository.addItem(ingredient)).thenReturn(unknownRepositoryException)
-
-            val sut = IngredientService(repository)
-
-            assertEquals(unknowException, sut.addItem(ingredient))
-            verify(repository).addItem(ingredient)
-        }
-    }
-
-    @Test
-    fun `should return a ServiceException when adding an invalid ingredient`() {
-        runBlocking {
-            val ingredient = Ingredient.identity().copy(name = "")
+            whenever(repository.find(request)).thenReturn(Left(Exception("something happened")))
 
             val sut = IngredientService(repository)
             assertEquals(Left(ServiceException(
-                    status = ServiceException.StatusCode.BadRequest,
-                    messages = listOf("name must not be empty.")
-            )), sut.addItem(ingredient))
+                status = ServiceException.StatusCode.Unknown,
+                messages = listOf("something happened")
+            )), sut.getAll(request))
+
+            verify(repository).find(request)
         }
     }
 
     @Test
-    fun `should be able to update an ingredient in the repository`() {
+    fun `#getById - should return an item by id when item exists`() {
         runBlocking {
-            val ingredient = Ingredient.identity()
-            val expected = Right(ingredient)
-
-            whenever(repository.updateItem(ingredient)).thenReturn(expected)
-
-            val sut = IngredientService(repository)
-
-            assertEquals(expected, sut.updateItem(ingredient))
-            verify(repository).updateItem(ingredient)
-        }
-    }
-
-    @Test
-    fun `should return a ServiceException when something went wrong updating an ingredient`() {
-        runBlocking {
+            val repository = mock<IRepository<Ingredient>>()
+            val id = "some-id"
             val ingredient = Ingredient.identity()
 
-            whenever(repository.updateItem(ingredient)).thenReturn(unknownRepositoryException)
+            whenever(repository.findById(id)).thenReturn(Right(Some(ingredient)))
 
             val sut = IngredientService(repository)
+            assertEquals(Right(ingredient), sut.getById(id))
 
-            assertEquals(unknowException, sut.updateItem(ingredient))
-            verify(repository).updateItem(ingredient)
+            verify(repository).findById(id)
         }
     }
 
     @Test
-    fun `should return a ServiceException when updating using an invalid ingredient`() {
+    fun `#getById - should return a ServiceException when requesting a non-existent item`() {
         runBlocking {
-            val ingredient = Ingredient.identity().copy(name = "")
+            val repository = mock<IRepository<Ingredient>>()
+            val id = "some-id"
+
+            whenever(repository.findById(id)).thenReturn(Right(None))
 
             val sut = IngredientService(repository)
             assertEquals(Left(ServiceException(
-                    status = ServiceException.StatusCode.BadRequest,
-                    messages = listOf("name must not be empty.")
-            )), sut.updateItem(ingredient))
+                status = ServiceException.StatusCode.NotFound,
+                messages = listOf("Item not found!")
+            )), sut.getById(id))
+
+            verify(repository).findById(id)
         }
     }
 
     @Test
-    fun `should be able to remove an ingredient in the repository`() {
+    fun `#addItem - should be able to add item if item does not already exist in repository`() {
         runBlocking {
-            val ingredient = Ingredient.identity()
-            val expected = Right(ingredient.id.toString())
+            val repository = mock<IRepository<Ingredient>>()
+            val expected = Ingredient.identity()
 
-            whenever(repository.removeItem(ingredient.id.toString())).thenReturn(expected)
+            whenever(repository.insert(expected)).thenReturn(Right(expected))
 
             val sut = IngredientService(repository)
+            assertEquals(Right(expected), sut.addItem(expected))
 
-            assertEquals(expected, sut.removeItem(ingredient.id.toString()))
-            verify(repository).removeItem(ingredient.id.toString())
+            verify(repository).insert(expected)
         }
     }
 
     @Test
-    fun `should return a ServiceException when something went wrong removing an ingredient`() {
+    fun `#addItem - should return a ServiceException if something goes wrong`() {
         runBlocking {
-            val ingredient = Ingredient.identity()
+            val repository = mock<IRepository<Ingredient>>()
+            val item = Ingredient.identity()
 
-            whenever(repository.removeItem(ingredient.id.toString())).thenReturn(unknownRepositoryException)
+            whenever(repository.insert(item)).thenReturn(Left(Exception("something happened")))
 
             val sut = IngredientService(repository)
+            assertEquals(Left(ServiceException(
+                status = ServiceException.StatusCode.Unknown,
+                messages = listOf("something happened")
+            )), sut.addItem(item))
 
-            assertEquals(unknowException, sut.removeItem(ingredient.id.toString()))
-            verify(repository).removeItem(ingredient.id.toString())
+            verify(repository).insert(item)
+        }
+    }
+
+    @Test
+    fun `#updateItem - should return an item after updating an existing item`() {
+        runBlocking {
+            val repository = mock<IRepository<Ingredient>>()
+            val item = Ingredient.identity()
+
+            whenever(repository.update(item)).thenReturn(Right(item))
+
+            val sut = IngredientService(repository)
+            assertEquals(Right(item), sut.updateItem(item))
+
+            verify(repository).update(item)
+        }
+    }
+
+    @Test
+    fun `#updateItem - should return a ServiceException if something goes wrong`() {
+        runBlocking {
+            val repository = mock<IRepository<Ingredient>>()
+            val item = Ingredient.identity()
+
+            whenever(repository.update(item)).thenReturn(Left(Exception("something happened")))
+
+            val sut = IngredientService(repository)
+            assertEquals(Left(ServiceException(
+                status = ServiceException.StatusCode.Unknown,
+                messages = listOf("something happened")
+            )), sut.updateItem(item))
+
+            verify(repository).update(item)
+        }
+    }
+
+    @Test
+    fun `#removeItem - should return item id if item exists`() {
+        runBlocking {
+            val repository = mock<IRepository<Ingredient>>()
+            val itemId = "some-id"
+
+            whenever(repository.remove(itemId)).thenReturn(Right(Some(itemId)))
+
+            val sut = IngredientService(repository)
+            assertEquals(Right(itemId), sut.removeItem(itemId))
+
+            verify(repository).remove(itemId)
+        }
+    }
+
+    @Test
+    fun `#removeItem - should return ServiceException if item is unable to be removed`() {
+        runBlocking {
+            val repository = mock<IRepository<Ingredient>>()
+            val item = Ingredient.identity()
+
+            whenever(repository.remove(item.id.toString())).thenReturn(Right(None))
+
+            val sut = IngredientService(repository)
+            assertEquals(Left(ServiceException(
+                status = ServiceException.StatusCode.Unknown,
+                messages = listOf("Unable to remove item from repository at this time")
+            )), sut.removeItem(item.id.toString()))
+
+            verify(repository).remove(item.id.toString())
+        }
+    }
+
+    @Test
+    fun `#removeItem - should return ServiceException if exception is thrown`() {
+        runBlocking {
+            val repository = mock<IRepository<Ingredient>>()
+            val item = Ingredient.identity()
+
+            whenever(repository.remove(item.id.toString())).thenReturn(Left(Exception("something happened")))
+
+            val sut = IngredientService(repository)
+            assertEquals(Left(ServiceException(
+                status = ServiceException.StatusCode.Unknown,
+                messages = listOf("something happened")
+            )), sut.removeItem(item.id.toString()))
+
+            verify(repository).remove(item.id.toString())
         }
     }
 }

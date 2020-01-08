@@ -13,12 +13,10 @@ data class ServiceException(
     }
 }
 
-typealias ServiceResult<T> = Either<ServiceException, T>
-
 interface IService<T> {
-    suspend fun getAll(request: PaginatedRequest): ServiceResult<PaginatedResponse<T>>
-    suspend fun getById(id: String): ServiceResult<T>
-    suspend fun addItem(item: T): ServiceResult<T>
-    suspend fun updateItem(item: T): ServiceResult<T>
-    suspend fun removeItem(id: String): ServiceResult<String>
+    suspend fun getAll(request: PaginatedRequest): Either<ServiceException, PaginatedResponse<T>>
+    suspend fun getById(id: String): Either<ServiceException, T>
+    suspend fun addItem(item: T): Either<ServiceException, T>
+    suspend fun updateItem(item: T): Either<ServiceException, T>
+    suspend fun removeItem(id: String): Either<ServiceException, String>
 }

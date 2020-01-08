@@ -75,7 +75,6 @@ subprojects {
 
     implementation "io.arrow-kt:arrow-core:0.10.4"
     implementation "io.arrow-kt:arrow-syntax:0.10.4"
-    implementation "io.arrow-kt:arrow-fx:0.10.4"
     kapt "io.arrow-kt:arrow-meta:0.10.4"
 
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"

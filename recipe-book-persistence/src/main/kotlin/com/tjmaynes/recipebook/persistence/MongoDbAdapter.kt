@@ -2,6 +2,7 @@ package com.tjmaynes.recipebook.persistence
 
 import arrow.core.*
 import com.mongodb.ConnectionString
+import com.tjmaynes.recipebook.core.types.IRepository
 import com.tjmaynes.recipebook.core.types.PaginatedRequest
 import kotlinx.coroutines.reactive.awaitLast
 import org.springframework.data.domain.PageRequest
@@ -13,7 +14,7 @@ import org.springframework.data.mongodb.core.query.Query
 class MongoDbAdapter<T>(
     private val template: ReactiveMongoTemplate,
     private val classType: Class<T>
-) : IDatabaseAdapter<T> {
+) : IRepository<T> {
     override suspend fun find(request: PaginatedRequest): Either<Throwable, List<T>> {
         val query = Query().with(PageRequest.of(request.pageNumber, request.pageSize))
         return Either.catch {
@@ -56,7 +57,7 @@ class MongoDbAdapter<T>(
     }
 
     companion object {
-        fun <T> build(connectionURL: String, classType: Class<T>): IDatabaseAdapter<T> =
+        fun <T> build(connectionURL: String, classType: Class<T>): IRepository<T> =
             MongoDbAdapter(
                 ReactiveMongoTemplate(
                     SimpleReactiveMongoDatabaseFactory(ConnectionString(connectionURL))
