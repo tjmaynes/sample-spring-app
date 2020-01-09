@@ -6,7 +6,8 @@ import arrow.core.extensions.either.applicative.applicative
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.tjmaynes.recipebook.core.domain.Ingredient
-import com.tjmaynes.recipebook.core.service.IngredientService
+import com.tjmaynes.recipebook.core.domain.validate
+import com.tjmaynes.recipebook.core.service.Service
 import com.tjmaynes.recipebook.core.types.IService
 import com.tjmaynes.recipebook.core.types.ServiceException
 import com.tjmaynes.recipebook.persistence.MongoDbAdapter
@@ -26,9 +27,9 @@ private fun <T> getJsonDataFromFile(fileLocation: String) =
 
 fun main(args: Array<String>) {
     val connectionString = System.getenv("RECIPE_BOOK_DB_CONNECTION_STRING")
-    val ingredientService = IngredientService(
-        MongoDbAdapter.build(connectionString, Ingredient::class.java)
-    )
+    val ingredientService = Service(MongoDbAdapter.build(connectionString, Ingredient::class.java)) { item ->
+        item.validate()
+    }
 
 //    runBlocking {
 //        seedIngredients(ingredientService).flatMap { ingredientResults ->

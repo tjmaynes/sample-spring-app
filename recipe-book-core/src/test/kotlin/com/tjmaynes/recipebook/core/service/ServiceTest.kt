@@ -1,4 +1,4 @@
-package com.tjmaynes.recipebook.persistence
+package com.tjmaynes.recipebook.core.service
 
 import arrow.core.Left
 import arrow.core.None
@@ -6,18 +6,22 @@ import arrow.core.Right
 import arrow.core.Some
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import com.tjmaynes.recipebook.core.domain.Ingredient
-import com.tjmaynes.recipebook.core.service.IngredientService
 import com.tjmaynes.recipebook.core.types.IRepository
 import com.tjmaynes.recipebook.core.types.PaginatedRequest
 import com.tjmaynes.recipebook.core.types.PaginatedResponse
 import com.tjmaynes.recipebook.core.types.ServiceException
+import com.tjmaynes.recipebook.core.validation.IsValidItem
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class IngredientServiceTest {
+class ServiceTest {
+    private val validate: IsValidItem<Ingredient> = { item -> Right(item) }
+    private val invalidate: IsValidItem<Ingredient> = { Left(listOf("something is bad")) }
+
     @Test
     fun `#getAll - should return a PaginatedResponse when items exist`() {
         runBlocking {
@@ -28,7 +32,7 @@ class IngredientServiceTest {
 
             whenever(repository.find(request)).thenReturn(Right(expected))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Right(PaginatedResponse(
                 expected, request.pageNumber, request.pageSize
             )), sut.getAll(request))
@@ -45,7 +49,7 @@ class IngredientServiceTest {
 
             whenever(repository.find(request)).thenReturn(Right(emptyList()))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Right(PaginatedResponse(
                 emptyList<Ingredient>(), 0, 10
             )), sut.getAll(request))
@@ -62,7 +66,7 @@ class IngredientServiceTest {
 
             whenever(repository.find(request)).thenReturn(Left(Exception("something happened")))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Left(ServiceException(
                 status = ServiceException.StatusCode.Unknown,
                 messages = listOf("something happened")
@@ -81,7 +85,7 @@ class IngredientServiceTest {
 
             whenever(repository.findById(id)).thenReturn(Right(Some(ingredient)))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Right(ingredient), sut.getById(id))
 
             verify(repository).findById(id)
@@ -96,7 +100,7 @@ class IngredientServiceTest {
 
             whenever(repository.findById(id)).thenReturn(Right(None))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Left(ServiceException(
                 status = ServiceException.StatusCode.NotFound,
                 messages = listOf("Item not found!")
@@ -114,7 +118,7 @@ class IngredientServiceTest {
 
             whenever(repository.insert(expected)).thenReturn(Right(expected))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Right(expected), sut.addItem(expected))
 
             verify(repository).insert(expected)
@@ -129,13 +133,29 @@ class IngredientServiceTest {
 
             whenever(repository.insert(item)).thenReturn(Left(Exception("something happened")))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Left(ServiceException(
                 status = ServiceException.StatusCode.Unknown,
                 messages = listOf("something happened")
             )), sut.addItem(item))
 
             verify(repository).insert(item)
+        }
+    }
+
+    @Test
+    fun `#addItem - should return a ServiceException if given an invalid item`() {
+        runBlocking {
+            val repository = mock<IRepository<Ingredient>>()
+            val item = Ingredient.identity()
+
+            val sut = Service(repository, invalidate)
+            assertEquals(Left(ServiceException(
+                status = ServiceException.StatusCode.BadRequest,
+                messages = listOf("something is bad")
+            )), sut.addItem(item))
+
+            verifyZeroInteractions(repository)
         }
     }
 
@@ -147,7 +167,7 @@ class IngredientServiceTest {
 
             whenever(repository.update(item)).thenReturn(Right(item))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Right(item), sut.updateItem(item))
 
             verify(repository).update(item)
@@ -162,13 +182,29 @@ class IngredientServiceTest {
 
             whenever(repository.update(item)).thenReturn(Left(Exception("something happened")))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Left(ServiceException(
                 status = ServiceException.StatusCode.Unknown,
                 messages = listOf("something happened")
             )), sut.updateItem(item))
 
             verify(repository).update(item)
+        }
+    }
+
+    @Test
+    fun `#updateItem - should return a ServiceException if given an invalid item`() {
+        runBlocking {
+            val repository = mock<IRepository<Ingredient>>()
+            val item = Ingredient.identity()
+
+            val sut = Service(repository, invalidate)
+            assertEquals(Left(ServiceException(
+                status = ServiceException.StatusCode.BadRequest,
+                messages = listOf("something is bad")
+            )), sut.updateItem(item))
+
+            verifyZeroInteractions(repository)
         }
     }
 
@@ -180,7 +216,7 @@ class IngredientServiceTest {
 
             whenever(repository.remove(itemId)).thenReturn(Right(Some(itemId)))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Right(itemId), sut.removeItem(itemId))
 
             verify(repository).remove(itemId)
@@ -195,7 +231,7 @@ class IngredientServiceTest {
 
             whenever(repository.remove(item.id.toString())).thenReturn(Right(None))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Left(ServiceException(
                 status = ServiceException.StatusCode.Unknown,
                 messages = listOf("Unable to remove item from repository at this time")
@@ -213,7 +249,7 @@ class IngredientServiceTest {
 
             whenever(repository.remove(item.id.toString())).thenReturn(Left(Exception("something happened")))
 
-            val sut = IngredientService(repository)
+            val sut = Service(repository, validate)
             assertEquals(Left(ServiceException(
                 status = ServiceException.StatusCode.Unknown,
                 messages = listOf("something happened")

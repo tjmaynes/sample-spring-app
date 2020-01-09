@@ -1,20 +1,22 @@
 package com.tjmaynes.recipebook.core.service
 
 import arrow.core.*
-import com.tjmaynes.recipebook.core.domain.Ingredient
-import com.tjmaynes.recipebook.core.domain.validate
 import com.tjmaynes.recipebook.core.types.*
+import com.tjmaynes.recipebook.core.validation.IsValidItem
 import com.tjmaynes.recipebook.core.validation.ValidationErrors
 
-class IngredientService(private val repository: IRepository<Ingredient>) : IService<Ingredient> {
-    override suspend fun getAll(request: PaginatedRequest): Either<ServiceException, PaginatedResponse<Ingredient>> =
+class Service<T>(
+    private val repository: IRepository<T>,
+    private val validateItem: IsValidItem<T>
+) : IService<T> {
+    override suspend fun getAll(request: PaginatedRequest): Either<ServiceException, PaginatedResponse<T>> =
         repository.find(request)
-            .mapLeft { handleException(it) }
+            .mapLeft(::handleException)
             .flatMap { Right(PaginatedResponse(it, request.pageNumber, request.pageSize)) }
 
-    override suspend fun getById(id: String): Either<ServiceException, Ingredient> =
+    override suspend fun getById(id: String): Either<ServiceException, T> =
         repository.findById(id)
-            .mapLeft { handleException(it) }
+            .mapLeft(::handleException)
             .flatMap {
                 when (it) {
                     is Some -> Right(it.t)
@@ -25,14 +27,14 @@ class IngredientService(private val repository: IRepository<Ingredient>) : IServ
                 }
             }
 
-    override suspend fun addItem(item: Ingredient): Either<ServiceException, Ingredient> =
-        item.validate().fold(
+    override suspend fun addItem(item: T): Either<ServiceException, T> =
+        validateItem(item).fold(
             { Left(handleBadRequestException(it)) },
             { repository.insert(it).mapLeft(::handleException) }
         )
 
-    override suspend fun updateItem(item: Ingredient): Either<ServiceException, Ingredient> =
-        item.validate().fold(
+    override suspend fun updateItem(item: T): Either<ServiceException, T> =
+        validateItem(item).fold(
             { Left(handleBadRequestException(it)) },
             { repository.update(it).mapLeft(::handleException) }
         )

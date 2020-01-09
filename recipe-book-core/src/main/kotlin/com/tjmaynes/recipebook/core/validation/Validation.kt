@@ -44,11 +44,11 @@ class ValidationCheck<T>(
 private fun getValidationErrors(validationError: ValidationError): Nel<String> = when (validationError) {
     is ValidationError.PropertyInvalid -> Nel(validationError.reason)
     is ValidationError.Multiple -> validationError.errors
-            .map { getValidationErrors(it) }
-            .flatten()
+        .map { getValidationErrors(it) }
+        .flatten()
 }
 
 fun getErrors(validationError: ValidationError): List<String> = getValidationErrors(validationError).toList()
 
 typealias ValidationErrors = List<String>
-typealias Validatable<T> = Either<ValidationErrors, T>
+typealias IsValidItem<T> = (T) -> Either<ValidationErrors, T>
