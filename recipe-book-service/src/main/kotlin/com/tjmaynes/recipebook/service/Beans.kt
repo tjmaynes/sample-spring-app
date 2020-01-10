@@ -1,11 +1,11 @@
 package com.tjmaynes.recipebook.service
 
-import com.tjmaynes.recipebook.core.domain.Ingredient
-import com.tjmaynes.recipebook.core.domain.validate
 import com.tjmaynes.recipebook.core.service.Service
 import com.tjmaynes.recipebook.core.types.IService
 import com.tjmaynes.recipebook.core.validation.IsValidItem
-import com.tjmaynes.recipebook.persistence.MongoDbAdapter
+import com.tjmaynes.recipebook.persistence.domain.Ingredient
+import com.tjmaynes.recipebook.persistence.domain.validate
+import com.tjmaynes.recipebook.persistence.repository.MongoDbAdapter
 import org.springframework.context.support.beans
 import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.server.WebHandler

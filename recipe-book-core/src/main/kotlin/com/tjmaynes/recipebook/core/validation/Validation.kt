@@ -24,18 +24,18 @@ object ValidationErrorSemigroup : Semigroup<ValidationError> {
 class ValidationCheck<T>(
         private val item: T
 ) : ApplicativeError<ValidatedPartialOf<ValidationError>, ValidationError> by Validated.applicativeError(ValidationErrorSemigroup) {
-    fun fieldIsGreaterThanZero(valueName: String, actualValue: Double): Kind<ValidatedPartialOf<ValidationError>, T> =
-            if (actualValue <= 0) raiseError(
-                    ValidationError.PropertyInvalid(
-                            valueName, "$valueName should be greater than zero."
-                    )
+    fun fieldIsGreaterThanOrEqualToZero(valueName: String, actualValue: Double): Kind<ValidatedPartialOf<ValidationError>, T> =
+        if (actualValue < 0) raiseError(
+            ValidationError.PropertyInvalid(
+                valueName, "$valueName should be greater than or equal to zero."
             )
-            else just(item)
+        )
+        else just(item)
 
     fun fieldIsNotEmpty(valueName: String, actualValue: String): Kind<ValidatedPartialOf<ValidationError>, T> =
-            if (actualValue.isEmpty()) raiseError(
-                    ValidationError.PropertyInvalid(
-                            valueName, "$valueName must not be empty."
+        if (actualValue.isEmpty()) raiseError(
+            ValidationError.PropertyInvalid(
+                valueName, "$valueName must not be empty."
                     )
             )
             else just(item)

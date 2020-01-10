@@ -1,4 +1,4 @@
-package com.tjmaynes.recipebook.persistence
+package com.tjmaynes.recipebook.persistence.repository
 
 import arrow.core.*
 import com.mongodb.ConnectionString
@@ -55,6 +55,15 @@ class MongoDbAdapter<T>(
             }
         }
     }
+
+    override suspend fun getTotalCount(): Either<Throwable, Long> =
+        Either.catch {
+            template
+                .count(Query(), classType)
+                .block()
+                .toOption()
+                .getOrElse { 0 }
+        }
 
     companion object {
         fun <T> build(connectionURL: String, classType: Class<T>): IRepository<T> =

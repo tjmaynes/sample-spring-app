@@ -25,3 +25,10 @@ To run the database locally, run the following command:
 ```bash
 make start_local_db
 ```
+
+To seed the database, run the following command:
+```bash
+RECIPE_BOOK_DB_CONNECTION_STRING=<some-connection-string> \
+RECIPE_BOOK_RAW_INGREDIENTS=<some-raw-json-data> \
+make seed_db
+```

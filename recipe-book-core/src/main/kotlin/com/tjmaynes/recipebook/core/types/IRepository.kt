@@ -9,4 +9,5 @@ interface IRepository<T> {
     suspend fun insert(item: T): Either<Throwable, T>
     suspend fun update(item: T): Either<Throwable, T>
     suspend fun remove(id: String): Either<Throwable, Option<String>>
+    suspend fun getTotalCount(): Either<Throwable, Long>
 }

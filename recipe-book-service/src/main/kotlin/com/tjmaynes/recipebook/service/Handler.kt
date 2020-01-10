@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
 
 interface IHandler<T> {
-    suspend fun all(serverRequest: ServerRequest): ServerResponse
+    suspend fun all(request: ServerRequest): ServerResponse
 }
 
 class Handler<T>(private val service: IService<T>) : IHandler<T> {

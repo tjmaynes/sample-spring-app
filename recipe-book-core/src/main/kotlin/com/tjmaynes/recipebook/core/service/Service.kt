@@ -39,17 +39,30 @@ class Service<T>(
             { repository.update(it).mapLeft(::handleException) }
         )
 
-    override suspend fun removeItem(id: String): Either<ServiceException, String> =
-        repository.remove(id).mapLeft { handleException(it) }
-            .flatMap {
-                when (it) {
-                    is Some -> Right(it.t)
-                    is None -> Left(ServiceException(
-                        status = ServiceException.StatusCode.Unknown,
-                        messages = listOf("Unable to remove item from repository at this time")
-                    ))
-                }
+    override suspend fun removeItem(id: String?): Either<ServiceException, String> =
+        Option.just(id).fold(
+            {
+                Left(ServiceException(
+                    status = ServiceException.StatusCode.BadRequest,
+                    messages = listOf("Please give a valid id")
+                ))
+            },
+            {
+                repository.remove(it!!).mapLeft { handleException(it) }
+                    .flatMap {
+                        when (it) {
+                            is Some -> Right(it.t)
+                            is None -> Left(ServiceException(
+                                status = ServiceException.StatusCode.Unknown,
+                                messages = listOf("Unable to remove item from repository at this time")
+                            ))
+                        }
+                    }
             }
+        )
+
+    override suspend fun getCount(): Either<ServiceException, Long> =
+        repository.getTotalCount().mapLeft { handleException(it) }
 
     private fun handleException(exception: Throwable) = ServiceException(
         status = ServiceException.StatusCode.Unknown,

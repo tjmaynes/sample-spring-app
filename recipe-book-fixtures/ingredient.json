@@ -2,694 +2,694 @@
   {
     "name": "exercitation",
     "calories": 19,
-    "serving_size": 5,
-    "size_type": "tablespoon",
+    "servingSize": 5,
+    "sizeType": "tablespoon",
     "quantity": 4,
     "price": 325.1,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "ullamco",
     "calories": 10,
-    "serving_size": 5,
-    "size_type": "teaspoon",
+    "servingSize": 5,
+    "sizeType": "teaspoon",
     "quantity": 5,
     "price": 373.72,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "eiusmod",
     "calories": 20,
-    "serving_size": 2,
-    "size_type": "teaspoon",
+    "servingSize": 2,
+    "sizeType": "teaspoon",
     "quantity": 2,
     "price": 165.35,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "ad",
     "calories": 12,
-    "serving_size": 0,
-    "size_type": "teaspoon",
+    "servingSize": 0,
+    "sizeType": "teaspoon",
     "quantity": 1,
     "price": 23.2,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "consequat",
     "calories": 5,
-    "serving_size": 2,
-    "size_type": "slices",
+    "servingSize": 2,
+    "sizeType": "slices",
     "quantity": 1,
     "price": 463.47,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "adipisicing",
     "calories": 18,
-    "serving_size": 5,
-    "size_type": "teaspoon",
+    "servingSize": 5,
+    "sizeType": "teaspoon",
     "quantity": 1,
     "price": 201.72,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "ipsum",
     "calories": 14,
-    "serving_size": 5,
-    "size_type": "teaspoon",
+    "servingSize": 5,
+    "sizeType": "teaspoon",
     "quantity": 2,
     "price": 82.3,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "sit",
     "calories": 15,
-    "serving_size": 5,
-    "size_type": "teaspoon",
+    "servingSize": 5,
+    "sizeType": "teaspoon",
     "quantity": 1,
     "price": 494.54,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "velit",
     "calories": 17,
-    "serving_size": 3,
-    "size_type": "tablespoon",
+    "servingSize": 3,
+    "sizeType": "tablespoon",
     "quantity": 2,
     "price": 168.78,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "dolor",
     "calories": 4,
-    "serving_size": 4,
-    "size_type": "teaspoon",
+    "servingSize": 4,
+    "sizeType": "teaspoon",
     "quantity": 2,
     "price": 313.84,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "sunt",
     "calories": 18,
-    "serving_size": 0,
-    "size_type": "teaspoon",
+    "servingSize": 0,
+    "sizeType": "teaspoon",
     "quantity": 1,
     "price": 305.89,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "duis",
     "calories": 10,
-    "serving_size": 2,
-    "size_type": "slices",
+    "servingSize": 2,
+    "sizeType": "slices",
     "quantity": 4,
     "price": 259.43,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "ad",
     "calories": 2,
-    "serving_size": 4,
-    "size_type": "teaspoon",
+    "servingSize": 4,
+    "sizeType": "teaspoon",
     "quantity": 4,
     "price": 452.12,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "quis",
     "calories": 3,
-    "serving_size": 3,
-    "size_type": "slices",
+    "servingSize": 3,
+    "sizeType": "slices",
     "quantity": 3,
     "price": 458.5,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "id",
     "calories": 13,
-    "serving_size": 1,
-    "size_type": "tablespoon",
+    "servingSize": 1,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 218.91,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "sint",
     "calories": 1,
-    "serving_size": 6,
-    "size_type": "slices",
+    "servingSize": 6,
+    "sizeType": "slices",
     "quantity": 4,
     "price": 451.74,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "voluptate",
     "calories": 16,
-    "serving_size": 5,
-    "size_type": "tablespoon",
+    "servingSize": 5,
+    "sizeType": "tablespoon",
     "quantity": 2,
     "price": 258.98,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "excepteur",
     "calories": 0,
-    "serving_size": 6,
-    "size_type": "tablespoon",
+    "servingSize": 6,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 363.69,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "duis",
     "calories": 5,
-    "serving_size": 3,
-    "size_type": "teaspoon",
+    "servingSize": 3,
+    "sizeType": "teaspoon",
     "quantity": 5,
     "price": 346.27,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "exercitation",
     "calories": 14,
-    "serving_size": 5,
-    "size_type": "tablespoon",
+    "servingSize": 5,
+    "sizeType": "tablespoon",
     "quantity": 2,
     "price": 263.41,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "excepteur",
     "calories": 2,
-    "serving_size": 2,
-    "size_type": "teaspoon",
+    "servingSize": 2,
+    "sizeType": "teaspoon",
     "quantity": 2,
     "price": 442.81,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "enim",
     "calories": 5,
-    "serving_size": 2,
-    "size_type": "tablespoon",
+    "servingSize": 2,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 399.79,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "non",
     "calories": 7,
-    "serving_size": 3,
-    "size_type": "teaspoon",
+    "servingSize": 3,
+    "sizeType": "teaspoon",
     "quantity": 5,
     "price": 376.27,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "esse",
     "calories": 0,
-    "serving_size": 2,
-    "size_type": "tablespoon",
+    "servingSize": 2,
+    "sizeType": "tablespoon",
     "quantity": 2,
     "price": 407.32,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "cupidatat",
     "calories": 5,
-    "serving_size": 6,
-    "size_type": "tablespoon",
+    "servingSize": 6,
+    "sizeType": "tablespoon",
     "quantity": 3,
     "price": 161.09,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "laborum",
     "calories": 5,
-    "serving_size": 3,
-    "size_type": "slices",
+    "servingSize": 3,
+    "sizeType": "slices",
     "quantity": 4,
     "price": 312.27,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "proident",
     "calories": 0,
-    "serving_size": 0,
-    "size_type": "teaspoon",
+    "servingSize": 0,
+    "sizeType": "teaspoon",
     "quantity": 1,
     "price": 95.89,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "nostrud",
     "calories": 17,
-    "serving_size": 2,
-    "size_type": "tablespoon",
+    "servingSize": 2,
+    "sizeType": "tablespoon",
     "quantity": 4,
     "price": 219.16,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "Lorem",
     "calories": 16,
-    "serving_size": 6,
-    "size_type": "slices",
+    "servingSize": 6,
+    "sizeType": "slices",
     "quantity": 4,
     "price": 417.41,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "irure",
     "calories": 15,
-    "serving_size": 2,
-    "size_type": "tablespoon",
+    "servingSize": 2,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 399.13,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "ea",
     "calories": 20,
-    "serving_size": 0,
-    "size_type": "slices",
+    "servingSize": 0,
+    "sizeType": "slices",
     "quantity": 4,
     "price": 301.14,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "magna",
     "calories": 7,
-    "serving_size": 5,
-    "size_type": "slices",
+    "servingSize": 5,
+    "sizeType": "slices",
     "quantity": 2,
     "price": 221.93,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "non",
     "calories": 3,
-    "serving_size": 2,
-    "size_type": "slices",
+    "servingSize": 2,
+    "sizeType": "slices",
     "quantity": 3,
     "price": 77.62,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "laboris",
     "calories": 9,
-    "serving_size": 3,
-    "size_type": "slices",
+    "servingSize": 3,
+    "sizeType": "slices",
     "quantity": 5,
     "price": 411.83,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "adipisicing",
     "calories": 1,
-    "serving_size": 3,
-    "size_type": "teaspoon",
+    "servingSize": 3,
+    "sizeType": "teaspoon",
     "quantity": 3,
     "price": 465.94,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "quis",
     "calories": 10,
-    "serving_size": 3,
-    "size_type": "teaspoon",
+    "servingSize": 3,
+    "sizeType": "teaspoon",
     "quantity": 1,
     "price": 42.49,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "mollit",
     "calories": 20,
-    "serving_size": 4,
-    "size_type": "teaspoon",
+    "servingSize": 4,
+    "sizeType": "teaspoon",
     "quantity": 1,
     "price": 68.59,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "et",
     "calories": 7,
-    "serving_size": 1,
-    "size_type": "slices",
+    "servingSize": 1,
+    "sizeType": "slices",
     "quantity": 1,
     "price": 335.16,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "sint",
     "calories": 2,
-    "serving_size": 1,
-    "size_type": "teaspoon",
+    "servingSize": 1,
+    "sizeType": "teaspoon",
     "quantity": 2,
     "price": 46.64,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "tempor",
     "calories": 15,
-    "serving_size": 1,
-    "size_type": "slices",
+    "servingSize": 1,
+    "sizeType": "slices",
     "quantity": 4,
     "price": 383.55,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "pariatur",
     "calories": 16,
-    "serving_size": 3,
-    "size_type": "slices",
+    "servingSize": 3,
+    "sizeType": "slices",
     "quantity": 2,
     "price": 290.55,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "incididunt",
     "calories": 7,
-    "serving_size": 5,
-    "size_type": "tablespoon",
+    "servingSize": 5,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 252.56,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "cupidatat",
     "calories": 7,
-    "serving_size": 2,
-    "size_type": "teaspoon",
+    "servingSize": 2,
+    "sizeType": "teaspoon",
     "quantity": 2,
     "price": 185.72,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "occaecat",
     "calories": 13,
-    "serving_size": 4,
-    "size_type": "teaspoon",
+    "servingSize": 4,
+    "sizeType": "teaspoon",
     "quantity": 5,
     "price": 232.87,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "dolor",
     "calories": 3,
-    "serving_size": 0,
-    "size_type": "teaspoon",
+    "servingSize": 0,
+    "sizeType": "teaspoon",
     "quantity": 1,
     "price": 196.31,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "eiusmod",
     "calories": 16,
-    "serving_size": 1,
-    "size_type": "teaspoon",
+    "servingSize": 1,
+    "sizeType": "teaspoon",
     "quantity": 2,
     "price": 334.34,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "ipsum",
     "calories": 1,
-    "serving_size": 2,
-    "size_type": "tablespoon",
+    "servingSize": 2,
+    "sizeType": "tablespoon",
     "quantity": 3,
     "price": 425.28,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "aute",
     "calories": 11,
-    "serving_size": 2,
-    "size_type": "tablespoon",
+    "servingSize": 2,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 299.07,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "officia",
     "calories": 7,
-    "serving_size": 1,
-    "size_type": "teaspoon",
+    "servingSize": 1,
+    "sizeType": "teaspoon",
     "quantity": 5,
     "price": 112.33,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "consequat",
     "calories": 16,
-    "serving_size": 1,
-    "size_type": "tablespoon",
+    "servingSize": 1,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 151.22,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "velit",
     "calories": 13,
-    "serving_size": 0,
-    "size_type": "slices",
+    "servingSize": 0,
+    "sizeType": "slices",
     "quantity": 2,
     "price": 410.98,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "nisi",
     "calories": 13,
-    "serving_size": 3,
-    "size_type": "tablespoon",
+    "servingSize": 3,
+    "sizeType": "tablespoon",
     "quantity": 2,
     "price": 180.74,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "aliqua",
     "calories": 14,
-    "serving_size": 4,
-    "size_type": "slices",
+    "servingSize": 4,
+    "sizeType": "slices",
     "quantity": 1,
     "price": 67.51,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "irure",
     "calories": 8,
-    "serving_size": 6,
-    "size_type": "tablespoon",
+    "servingSize": 6,
+    "sizeType": "tablespoon",
     "quantity": 5,
     "price": 191.13,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "magna",
     "calories": 20,
-    "serving_size": 4,
-    "size_type": "slices",
+    "servingSize": 4,
+    "sizeType": "slices",
     "quantity": 1,
     "price": 461.9,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "esse",
     "calories": 20,
-    "serving_size": 3,
-    "size_type": "slices",
+    "servingSize": 3,
+    "sizeType": "slices",
     "quantity": 3,
     "price": 419.21,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "officia",
     "calories": 10,
-    "serving_size": 2,
-    "size_type": "slices",
+    "servingSize": 2,
+    "sizeType": "slices",
     "quantity": 2,
     "price": 301.39,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "tempor",
     "calories": 20,
-    "serving_size": 6,
-    "size_type": "teaspoon",
+    "servingSize": 6,
+    "sizeType": "teaspoon",
     "quantity": 5,
     "price": 318.06,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "incididunt",
     "calories": 4,
-    "serving_size": 6,
-    "size_type": "teaspoon",
+    "servingSize": 6,
+    "sizeType": "teaspoon",
     "quantity": 5,
     "price": 472.7,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "do",
     "calories": 11,
-    "serving_size": 5,
-    "size_type": "teaspoon",
+    "servingSize": 5,
+    "sizeType": "teaspoon",
     "quantity": 5,
     "price": 388.96,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "id",
     "calories": 16,
-    "serving_size": 6,
-    "size_type": "tablespoon",
+    "servingSize": 6,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 477.11,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "anim",
     "calories": 1,
-    "serving_size": 1,
-    "size_type": "teaspoon",
+    "servingSize": 1,
+    "sizeType": "teaspoon",
     "quantity": 4,
     "price": 434.96,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "laborum",
     "calories": 6,
-    "serving_size": 1,
-    "size_type": "tablespoon",
+    "servingSize": 1,
+    "sizeType": "tablespoon",
     "quantity": 4,
     "price": 369.79,
-    "quality": 2
+    "quality": "Low"
   },
   {
     "name": "deserunt",
     "calories": 19,
-    "serving_size": 0,
-    "size_type": "slices",
+    "servingSize": 0,
+    "sizeType": "slices",
     "quantity": 3,
     "price": 205.68,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "sit",
     "calories": 18,
-    "serving_size": 0,
-    "size_type": "tablespoon",
+    "servingSize": 0,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 83.2,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "commodo",
     "calories": 13,
-    "serving_size": 2,
-    "size_type": "teaspoon",
+    "servingSize": 2,
+    "sizeType": "teaspoon",
     "quantity": 4,
     "price": 177.05,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "sunt",
     "calories": 13,
-    "serving_size": 1,
-    "size_type": "teaspoon",
+    "servingSize": 1,
+    "sizeType": "teaspoon",
     "quantity": 4,
     "price": 201.59,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "anim",
     "calories": 9,
-    "serving_size": 3,
-    "size_type": "teaspoon",
+    "servingSize": 3,
+    "sizeType": "teaspoon",
     "quantity": 4,
     "price": 129.12,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "officia",
     "calories": 6,
-    "serving_size": 5,
-    "size_type": "slices",
+    "servingSize": 5,
+    "sizeType": "slices",
     "quantity": 3,
     "price": 266.09,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "veniam",
     "calories": 5,
-    "serving_size": 4,
-    "size_type": "slices",
+    "servingSize": 4,
+    "sizeType": "slices",
     "quantity": 5,
     "price": 355.64,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "aute",
     "calories": 14,
-    "serving_size": 0,
-    "size_type": "slices",
+    "servingSize": 0,
+    "sizeType": "slices",
     "quantity": 1,
     "price": 319.78,
-    "quality": 1
+    "quality": "Low"
   },
   {
     "name": "cillum",
     "calories": 10,
-    "serving_size": 6,
-    "size_type": "teaspoon",
+    "servingSize": 6,
+    "sizeType": "teaspoon",
     "quantity": 1,
     "price": 227.73,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "reprehenderit",
     "calories": 14,
-    "serving_size": 2,
-    "size_type": "slices",
+    "servingSize": 2,
+    "sizeType": "slices",
     "quantity": 1,
     "price": 124.72,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "id",
     "calories": 13,
-    "serving_size": 2,
-    "size_type": "slices",
+    "servingSize": 2,
+    "sizeType": "slices",
     "quantity": 1,
     "price": 313.99,
-    "quality": 4
+    "quality": "High"
   },
   {
     "name": "in",
     "calories": 18,
-    "serving_size": 4,
-    "size_type": "teaspoon",
+    "servingSize": 4,
+    "sizeType": "teaspoon",
     "quantity": 5,
     "price": 358.92,
-    "quality": 3
+    "quality": "High"
   },
   {
     "name": "laboris",
     "calories": 1,
-    "serving_size": 2,
-    "size_type": "tablespoon",
+    "servingSize": 2,
+    "sizeType": "tablespoon",
     "quantity": 1,
     "price": 485.05,
-    "quality": 5
+    "quality": "High"
   },
   {
     "name": "consequat",
     "calories": 20,
-    "serving_size": 1,
-    "size_type": "tablespoon",
+    "servingSize": 1,
+    "sizeType": "tablespoon",
     "quantity": 2,
     "price": 148.82,
-    "quality": 2
+    "quality": "Low"
   }
 ]

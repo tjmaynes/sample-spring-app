@@ -1,4 +1,4 @@
-package com.tjmaynes.recipebook.persistence
+package com.tjmaynes.recipebook.persistence.repository
 
 import arrow.core.None
 import arrow.core.Right
@@ -7,10 +7,11 @@ import com.mongodb.client.result.DeleteResult
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.tjmaynes.recipebook.core.domain.Ingredient
 import com.tjmaynes.recipebook.core.types.PaginatedRequest
+import com.tjmaynes.recipebook.persistence.domain.Ingredient
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
@@ -20,16 +21,21 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 class MongoDbAdapterTest {
+    private lateinit var template: ReactiveMongoTemplate
     private val classType = Ingredient::class.java
+    private val item = Ingredient.identity()
+
+    @BeforeEach
+    fun setup() {
+        template = mock<ReactiveMongoTemplate>()
+    }
 
     @Test
     fun `#find - should return items when items exist`() {
         runBlocking {
-            val template = mock<ReactiveMongoTemplate>()
             val request = PaginatedRequest(0, 10)
             val query = Query().with(PageRequest.of(request.pageNumber, request.pageSize))
-
-            val expected = listOf(Ingredient.identity())
+            val expected = listOf(item)
 
             whenever(template.find(query, classType)).thenReturn(Flux.fromIterable(expected))
 
@@ -43,7 +49,6 @@ class MongoDbAdapterTest {
     @Test
     fun `#find - should return an empty when items do not exist`() {
         runBlocking {
-            val template = mock<ReactiveMongoTemplate>()
             val request = PaginatedRequest(0, 10)
             val query = Query().with(PageRequest.of(request.pageNumber, request.pageSize))
 
@@ -61,22 +66,18 @@ class MongoDbAdapterTest {
         runBlocking {
             val template = mock<ReactiveMongoTemplate>()
 
-            val expected = Ingredient.identity()
-
-            whenever(template.findById(expected.id.toString(), classType)).thenReturn(Mono.just(expected))
+            whenever(template.findById(item.id.toString(), classType)).thenReturn(Mono.just(item))
 
             val sut = MongoDbAdapter(template, classType)
-            assertEquals(Right(Some(expected)), sut.findById(expected.id.toString()))
+            assertEquals(Right(Some(item)), sut.findById(item.id.toString()))
 
-            verify(template).findById(expected.id.toString(), classType)
+            verify(template).findById(item.id.toString(), classType)
         }
     }
 
     @Test
     fun `#findById - should return nothing when item does not exist`() {
         runBlocking {
-            val template = mock<ReactiveMongoTemplate>()
-
             whenever(template.findById("some-id", classType)).thenReturn(Mono.empty())
 
             val sut = MongoDbAdapter(template, classType)
@@ -89,10 +90,6 @@ class MongoDbAdapterTest {
     @Test
     fun `#insert - should return item when item does not not and is able to be inserted`() {
         runBlocking {
-            val template = mock<ReactiveMongoTemplate>()
-
-            val item = Ingredient.identity()
-
             whenever(template.insert(item)).thenReturn(Mono.just(item))
 
             val sut = MongoDbAdapter(template, classType)
@@ -105,10 +102,6 @@ class MongoDbAdapterTest {
     @Test
     fun `#insert - should return empty when item is unable to be inserted`() {
         runBlocking {
-            val template = mock<ReactiveMongoTemplate>()
-
-            val item = Ingredient.identity()
-
             whenever(template.insert(item)).thenReturn(Mono.empty<Ingredient>())
 
             val sut = MongoDbAdapter(template, classType)
@@ -121,9 +114,6 @@ class MongoDbAdapterTest {
     @Test
     fun `#update - should return item when item has been updated`() {
         runBlocking {
-            val template = mock<ReactiveMongoTemplate>()
-
-            val item = Ingredient.identity()
             whenever(template.save(item)).thenReturn(Mono.just(item))
 
             val sut = MongoDbAdapter(template, classType)
@@ -136,14 +126,11 @@ class MongoDbAdapterTest {
     @Test
     fun `#remove - should return item id when item has been removed from database`() {
         runBlocking {
-            val template = mock<ReactiveMongoTemplate>()
-            val itemId = "some-id"
-
-            val query = Query().addCriteria(Criteria(itemId))
+            val query = Query().addCriteria(Criteria(item.id.toString()))
             whenever(template.remove(query, classType)).thenReturn(Mono.just(DeleteResult.acknowledged(1)))
 
             val sut = MongoDbAdapter(template, classType)
-            assertEquals(Right(Some(itemId)), sut.remove(itemId))
+            assertEquals(Right(Some(item.id.toString())), sut.remove(item.id.toString()))
 
             verify(template).remove(query, classType)
         }
@@ -152,16 +139,27 @@ class MongoDbAdapterTest {
     @Test
     fun `#remove - should return None when item was not removed from database`() {
         runBlocking {
-            val template = mock<ReactiveMongoTemplate>()
-            val itemId = "some-id"
-
-            val query = Query().addCriteria(Criteria(itemId))
+            val query = Query().addCriteria(Criteria(item.id.toString()))
             whenever(template.remove(query, classType)).thenReturn(Mono.just(DeleteResult.acknowledged(0)))
 
             val sut = MongoDbAdapter(template, classType)
-            assertEquals(Right(None), sut.remove(itemId))
+            assertEquals(Right(None), sut.remove(item.id.toString()))
 
             verify(template).remove(query, classType)
+        }
+    }
+
+    @Test
+    fun `#getTotalCount - should return Long when items exist in database`() {
+        runBlocking {
+            val query = Query()
+            val expected = 10.toLong()
+            whenever(template.count(query, classType)).thenReturn(Mono.just(expected))
+
+            val sut = MongoDbAdapter(template, classType)
+            assertEquals(Right(expected), sut.getTotalCount())
+
+            verify(template).count(query, classType)
         }
     }
 }
