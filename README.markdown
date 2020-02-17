@@ -2,7 +2,7 @@
 
 > An app for creating and viewing recipes, making shopping lists for ingredients, and more!
 
-[![CircleCI](https://circleci.com/gh/tjmaynes/recipe-book.svg?style=svg)](https://circleci.com/gh/tjmaynes/recipe-book)
+[![CircleCI](https://circleci.com/gh/tjmaynes/learning-spring.svg?style=svg)](https://circleci.com/gh/tjmaynes/learning-spring)
 
 ## Requirements
 
